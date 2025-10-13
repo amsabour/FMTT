@@ -1,0 +1,297 @@
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Time Scaling of Diffusions with Flowmaps</title>
+    <meta name="description" content="Using flowmaps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta name="robots" content="all">
+    <meta content="en_EN" property="og:locale">
+    <meta content="website" property="og:type">
+    <meta content="#" property="og:url">
+    <meta property="og:title" content="Test Time Scaling of Diffusions with Flowmaps">
+    <meta property="og:description" content="Using flowmaps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@amsabour">
+    <meta name="twitter:description" content="Test Time Scaling of Diffusions with Flowmaps">
+    <meta name="twitter:image:src" content="assets/figures/clarity.png">
+    
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+    <link href="assets/fontawesome-free-6.6.0-web/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css"/>
+    <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+    <!-- <script src="assets/scripts/navbar.js"></script>  Comment to remove table of content. -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+              scale: 95,
+              fonts: ["Gyre-Pagella"],
+              imageFont: null,
+              undefinedFamily: "'Arial Unicode MS', cmbright"
+            },
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+          });
+    </script>
+    <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- Title Page -->
+    <!-- Dark Theme Example: Change the background colour dark and change the following div "blog-title" into "blog-title white". -->
+    <div class="container blog" id="first-content" style="background-color: #E0E4E6;">
+        <!-- If you don't have a project cover: Change "blog-title" into "blog-title no-cover"  -->
+        <div class="blog-title">
+            <div class="blog-intro">
+                <div>
+                    <h1 class="title">Test Time Scaling of Diffusions with Flowmaps</h1>
+                    <p class="author">
+                        <a href="#" target="_blank">Amirmojtaba Sabour</a><sup>*,1,2,10</sup>,
+                        <a href="http://malbergo.me/" target="_blank">Michael S. Albergo</a><sup>*,3,4</sup>,
+                        <a href="https://cdenrich.github.io/" target="_blank">Carles Domingo-Enrich</a><sup>*,5</sup>,
+                        <a href="https://nmboffi.github.io/" target="_blank">Nicholas M. Boffi</a><sup>6</sup>,
+                        <a href="https://www.cs.utoronto.ca/~fidler/" target="_blank">Sanja Fidler</a><sup>1,2,10</sup>,
+                        <a href="https://karstenkreis.github.io/" target="_blank">Karsten Kreis</a><sup>1</sup>,
+                        <a href="https://cims.nyu.edu/people/profiles/VANDEN-EIJNDEN_Eric.html" target="_blank">Eric Vanden-Eijnden</a><sup>7,8,9</sup>
+                        (<sup>*</sup>Core Contributors)
+                    </p>
+                    <p class="author" style="padding-top: 0px;">
+                        <sup>1</sup> NVIDIA
+                        <sup>2</sup> University of Toronto 
+                        <sup>3</sup> Harvard University 
+                        <sup>4</sup> Kempner Institute 
+                        <sup>5</sup> Microsoft Research
+                        <sup>6</sup> Carnegie Mellon University
+                        <sup>7</sup> Courant Institute 
+                        <sup>8</sup> New York University
+                        <sup>9</sup> Capital Fund Management (CFM) 
+                        <sup>10</sup> Vector Institute
+                    </p>
+                    <p class="abstract">
+                        Test time scaling of diffusions aims to generate samples that achieve high scores under a user-defined reward.
+                        Most existing methods do this by injecting the reward's gradient directly into the diffusion process, but this is ill-posed since the reward is only well-defined on the clean data distribution at the end of generation. 
+                        Prior approaches attempt to fix this by using a 1-step denoiser to estimate the final sample, but this is extremely inaccurate early in sampling, leading to unhelpful gradients.
+                        We introduce Flow Map Trajectory Tilting (FMTT), a simple alternative that uses the flow map as a look-ahead, allowing reward signals to be applied consistently throughout the generation process. 
+                        FMTT can be used for both exact sampling via importance weighting and principled search that focuses on high-reward samples.
+                    </p>
+                    <!-- Using FontAwesome Pro -->
+                    <!-- <div class="info">
+                        <div>
+                            <a href="https://arxiv.org" class="button icon" style="background-color: rgba(255, 255, 255, 0.3)"> Paper <i class="far fa-book-open"></i></a> &nbsp;&nbsp; 
+                            <a href="https://github.com" class="button icon" style="background-color: rgba(255, 255, 255, 0.3)">Code <i class="far fa-code"></i></a>  &nbsp;&nbsp; 
+                            <a href="https://www.microsoft.com/en-gb/microsoft-365/powerpoint" class="button icon" style="background-color: rgba(255, 255, 255, 0.3);">Slides <i class="far fa-presentation"></i></a>  &nbsp;&nbsp; 
+                            <a href="https://huggingface.co/spaces" class="button icon" style="background-color: rgba(255, 255, 255, 0.3)">Demo <i class="fa-light fa-face-smiling-hands"></i></a>
+                        </div>
+                    </div> -->
+
+                    <!-- Using FontAwesome Free -->
+                    <div class="info">
+                        <div>
+                            <a href="https://arxiv.org" target="_blank" class="button icon" style="background-color: rgba(255, 255, 255, 0.2)"><i class="fa-solid fa-book-open"></i> &nbsp; Paper</a> &nbsp;
+                            <!-- <a href="https://github.com" class="button icon" style="background-color: rgba(255, 255, 255, 0.2)"><i class="fa-solid fa-code"></i> &nbsp; Code (soon)</a>   -->
+                            <!-- <a href="https://www.microsoft.com/en-gb/microsoft-365/powerpoint" class="button icon" style="background-color: rgba(255, 255, 255, 0.2);">Slides <i class="fa-regular fa-file-powerpoint"></i></a> &nbsp;&nbsp;  -->
+                            <!-- <a href="https://huggingface.co/spaces/" class="button icon" style="background-color: rgba(255, 255, 255, 0.2)">Demo <i class="fa-solid fa-laptop-code"></i></a>  -->
+                        </div>
+                    </div>
+                </div>
+               
+                <!-- <div class="info">
+                    <p>arXiv</p>
+                </div> -->
+            </div>
+
+            <div class="blog-cover">
+                <img class="foreground" src="assets/figures/teaser_v2.png">
+                <img class="background" src="assets/figures/teaser_v2.png">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container blog main first" id="blog-main">
+        <h1>
+            Introduction
+        </h1>
+        <p class='text'>
+            Diffusions and flow-based models have become the backbone of modern generative modeling, producing remarkably realistic images and videos, and proved 
+            to be highly successful tools across computer vision and scientific domains. 
+            Sampling from these models can be seen as numerically solving an ordinary or stochastic differential equation (ODE/SDE), the coefficients of which are 
+            learned neural networks.
+            Specifically, these methods learn neural networks to estimate a velocity field $b_t(x_t)$ and score function $s_t(x_t)$, and solve the following SDE 
+            from $t=0$ (pure noise) to $t=1$ (pure data) to produce new samples:
+            $$
+            d x_t = [b_t(x_t) + \epsilon_t s_t(x_t)] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I),
+            $$
+            where setting $\epsilon_t = 0$ corresponds to the deterministic case, often called the probability flow ODE (PF-ODE). 
+        </p>
+        <p class='text'>
+            In practice, to enable controllable generation, it is often the case that we want to generate samples from 
+            the model's distribution $p(x)$ that have high scores under some user-defined reward function $r(x)$. 
+            Concretely, the goal is to generate samples from a distribution $q(x)$ that maximizes the following objective:
+            $$
+            \arg\max_{q} \left[\mathbb{E}_{q}[r(x)] - \lambda \times \mathrm{KL}(q \,\|\, p)\right]
+            $$
+            where $\lambda$ is a hyperparameter that controls the trade-off between the reward and deviating from the base distribution. 
+            This problem has a closed-form solution: $q(x) \propto p(x) \exp(r(x) / \lambda)$,
+            which is referred to as the reward-tilted distribution. An active area of current research is how to best adapt the 
+            dynamical equations (SDE/ODE) at inference time to generate samples from this tilted distribution. 
+        </p>
+
+        <p class="text"> 
+            A common approach is to inject the gradient of a reward directly into the diffusion process, nudging samples toward higher-reward regions. 
+            However, rewards like “semantic correctness” or “photographic quality” are only well-defined on the final data distribution, making early-stage guidance ill-posed. 
+            Denoiser-based solutions try to predict what a noisy sample will look like once fully generated, but these estimates are unreliable until the image is almost complete.
+        </p>
+
+        <p class="text">
+            Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. By using the flow map, a function that can traverse the probability flow ODE to 
+            accurately predict the endpoint of each intermediate state, FMTT enables consistent reward guidance throughout the trajectory. 
+            This unifies sampling and search under one framework, allowing both exact sampling via importance weighting and reward-tilted search that reliably 
+            finds high-reward samples.
+        </p>
+    </div>
+
+    <div class="container blog main gray-linear">
+        <img src="clarity/images/vit.png">
+        <p class="caption">
+            Erat id non venenatis nullam leo nisl risus fames. Quis montes tortor aenean posuere non. Maximus dui cras enim tristique; ipsum pellentesque ut. Mauris hac felis elit scelerisque nascetur risus adipiscing ultrices. Quis augue pulvinar laoreet facilisis vel. Pharetra blandit nunc id, sem cubilia sit porttitor. Montes hendrerit vestibulum vulputate tincidunt facilisis metus. Interdum mi vivamus nunc consectetur adipiscing; aptent semper dictum.
+        </p>
+    </div>
+
+    <div class="container blog main">
+        <h1>Results</h1>
+        <p class="text">
+            Arcu imperdiet nunc, dignissim ornare arcu nam eros cras venenatis. Non volutpat parturient luctus eros litora natoque; elementum dui. Nulla cubilia et nascetur dictum nisi phasellus. Natoque himenaeos porta vulputate interdum id mollis. Fames diam integer semper ligula per. Sapien ex magnis pellentesque neque rhoncus conubia. Purus torquent nunc ligula auctor cras pharetra. Porttitor vulputate dis ante suspendisse a iaculis massa sagittis.
+        </p>
+    </div>
+
+    <div class="container blog extra-large gray">
+        <div class="slide-menu">
+            <ul class="dots" id="slide-menu">
+                <li class="dot active"></li>
+                <li class="dot"></li>
+                <li class="dot"></li>
+            </ul>
+        </div>
+       
+        <div class="slide-content", style="display: block;">
+            <div class="columns-4">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+            </div>
+            <p class="caption">
+                Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
+            </p>
+        </div>
+
+        <div class="slide-content", style="display: none;">
+            <div class="columns-6">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+            </div>
+            <p class="caption">
+                Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
+            </p>
+        </div>
+
+        <div class="slide-content", style="display: none;">
+            <div class="columns-8">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+            </div>
+            <p class="caption">
+                Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
+            </p>
+        </div>
+    </div>
+
+    <div class="container blog main">
+        <h1>Additional Analysis</h1>
+        <h2>Observation 1</h2>
+        <p class="text">
+            Lorem ipsum odor amet, consectetuer adipiscing elit. Himenaeos sociosqu facilisi ante; cubilia sociosqu magna libero. Dignissim vehicula felis taciti sollicitudin quam ligula a, vivamus porta. Tellus facilisi pharetra non posuere a sapien. Sagittis felis lectus ac interdum pretium sit himenaeos.
+        </p>
+        <ol>
+            <li>
+                <p class="text">Conubia aliquet semper inceptos ultricies vel metus fusce litora. </p>
+            </li>
+            <li>
+                <p class="text">Ultricies dis vehicula non lobortis hac sagittis urna dignissim ex. 
+                </p>
+            </li>
+        </ol>
+
+        <h2>Observation 2</h2>
+        <p class="text">
+            Lorem ipsum odor amet, consectetuer adipiscing elit. Himenaeos sociosqu facilisi ante; cubilia sociosqu magna libero. Dignissim vehicula felis taciti sollicitudin quam ligula a, vivamus porta. Tellus facilisi pharetra non posuere a sapien. Sagittis felis lectus ac interdum pretium sit himenaeos.
+        </p>
+
+        <ul >
+            <li>
+                <p class="text">Conubia aliquet semper inceptos ultricies vel metus fusce litora. </p>
+            </li>
+            <li>
+                <p class="text">Ultricies dis vehicula non lobortis hac sagittis urna dignissim ex. 
+                </p>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="container blog main">
+        <h1>Conclusion</h1>
+        <p class="text">
+            Per aptent diam; ut in mauris ultricies torquent conubia dolor. Aliquet venenatis sapien, dictum finibus ad dui. Finibus sollicitudin nullam consectetur malesuada molestie semper dolor. Platea eget hac cursus aptent maecenas penatibus vulputate. Ligula libero torquent sit per praesent praesent. Sodales risus mattis enim odio risus tristique. Dapibus vivamus quis scelerisque sollicitudin penatibus placerat erat. Ante aliquet vel; morbi quisque leo morbi. Ac sollicitudin imperdiet lacus integer cursus metus parturient euismod sociosqu.
+        </p>
+    </div>
+
+    <div class="container blog main">
+        <h1>Citation</h1>
+        <p class="text">
+            Dictumst eu himenaeos malesuada nisi eros auctor id suspendisse. Ipsum parturient est vitae proin maecenas. Nulla mollis vivamus cras nam dapibus consectetur. Id efficitur ac ultricies ornare at litora. Vestibulum nibh cursus eu gravida vivamus sem vulputate. Montes nisi ipsum urna vitae semper suscipit.
+        </p>
+<pre><code class="plaintext">@article{doe2048agi,
+    title={Artificial General Intelligence},
+    author={Doe John},
+    journal={nature},
+    year={2048}
+}</code></pre>
+    </div>
+
+    <!-- Footer Page -->
+    <footer>
+        <div class="container">
+            <p>
+                This website is built on the <a href="https://shikun.io/projects/clarity">Clarity Template</a>, designed by <a href="https://shikun.io/">Shikun Liu</a>.
+            </p>
+        </div>    
+    </footer>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="clarity/clarity.js"></script>    
+    <script src="assets/scripts/main.js"></script>    
+    </html>
+</body>
