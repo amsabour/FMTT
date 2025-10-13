@@ -145,36 +145,70 @@
             which is referred to as the reward-tilted distribution. An active area of current research is how to best adapt the 
             dynamical equations (SDE/ODE) at inference time to generate samples from this tilted distribution. 
         </p>
-
-        <p class="text"> 
-            A common approach is to inject the gradient of a reward directly into the diffusion process, nudging samples toward higher-reward regions. 
-            However, rewards like “semantic correctness” or “photographic quality” are only well-defined on the final data distribution, making early-stage guidance ill-posed. 
-            Denoiser-based solutions try to predict what a noisy sample will look like once fully generated, but these estimates are unreliable until the image is almost complete.
-        </p>
-
-        <p class="text">
-            Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. By using the flow map, a function that can traverse the probability flow ODE to 
-            accurately predict the endpoint of each intermediate state, FMTT enables consistent reward guidance throughout the trajectory. 
-            This unifies sampling and search under one framework, allowing both exact sampling via importance weighting and reward-tilted search that reliably 
-            finds high-reward samples.
-        </p>
     </div>
 
     <div class="container blog main gray-linear">
-        <img src="clarity/images/vit.png">
+        <img src="assets/figures/overview_fig.jpg" style="width: 100%;">
         <p class="caption">
-            Erat id non venenatis nullam leo nisl risus fames. Quis montes tortor aenean posuere non. Maximus dui cras enim tristique; ipsum pellentesque ut. Mauris hac felis elit scelerisque nascetur risus adipiscing ultrices. Quis augue pulvinar laoreet facilisis vel. Pharetra blandit nunc id, sem cubilia sit porttitor. Montes hendrerit vestibulum vulputate tincidunt facilisis metus. Interdum mi vivamus nunc consectetur adipiscing; aptent semper dictum.
+            Using the flowmap $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
+            This allows better ascent on the reward, as well as remarkably simplifying the importance weights for exact sampling.
         </p>
     </div>
 
     <div class="container blog main">
-        <h1>Results</h1>
+        <h1>Sampling from the Reward-Tilted Distribution</h1>
+
         <p class="text">
-            Arcu imperdiet nunc, dignissim ornare arcu nam eros cras venenatis. Non volutpat parturient luctus eros litora natoque; elementum dui. Nulla cubilia et nascetur dictum nisi phasellus. Natoque himenaeos porta vulputate interdum id mollis. Fames diam integer semper ligula per. Sapien ex magnis pellentesque neque rhoncus conubia. Purus torquent nunc ligula auctor cras pharetra. Porttitor vulputate dis ante suspendisse a iaculis massa sagittis.
+            Efforts to align diffusion models for high-reward generation can be broadly divided into <em>training-based</em> and <em>training-free</em> approaches. 
+            Training-based methods, often referred to as diffusion alignment techniques, optimize the model parameters so that the retrained model naturally produces higher-reward samples. 
+            While effective, these approaches are computationally expensive and must be repeated for each new reward function. 
+            Training-free methods, also known as test time scaling methods, on the other hand, modify the <em>sampling process</em> to bias generation toward higher-reward regions, 
+            making them far more flexible when working with multiple or rapidly changing rewards.
+            In this work, we focus on training-free methods.
+        </p>
+
+        <p class="text"> 
+            A common approach is to apply <em style="font-weight: 600;">reward-guidance</em>, which injects the gradient of the reward directly into the diffusion process to nudge samples toward higher-reward regions: 
+            $$
+            dx_t = [b_t(x_t) + \epsilon_t s_t(x_t) + \color{green}{\epsilon_t \nabla r_t(x_t)}] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I).
+            $$ 
+            In practice, however, most rewards (such as “text alignment” or “visual fidelity”) are only defined on clean samples $x_1$ at the end of generation. 
+            Prior works address this by either 
+            (1) ignoring the issue and evaluating the reward directly on the noisy state (e.g., $r_t(x) = t\,r(x)$), or 
+            (2) using the denoiser $D(x_t) = \mathbb{E}[x_1 | x_t]$ to approximate the final image (e.g., $r_t(x) = t\,r(D(x_t))$). 
+            Both strategies evaluate the reward at states that are not yet fully generated, leading to unreliable gradients, especially in the early stages of sampling.
+        </p>
+
+        <p class="text">
+            Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. Specifically, FMTT proposes using the flow map, which is a function $X_{t, 1}(x_t)$
+            that can traverse the probability flow ODE to accurately estimate the final state $x_1$ of each intermediate state $x_t$. By using the flowmap as a 
+            look-ahead and computing the reward gradient at the estimated final state (e.g. $r_t(x_t) = t\,r(X_{t, 1}(x_t))$), FMTT enables consistent reward guidance 
+            throughout the trajectory. We additionally unify sampling and search under one framework, allowing both exact sampling via importance weighting and 
+            reward-tilted search that reliably finds high-reward samples. Please refer to the paper for more details.
         </p>
     </div>
 
-    <div class="container blog extra-large gray">
+    <div class="container blog main">
+        <h1>Thermodynamic Length Analysis on MNIST</h1>
+        <h2>Michael + Carles: Please fill this in. </h2>
+        <p class="text">
+            TODO: FILL THIS IN. ADD MNIST FIGURES.
+        </p>
+    </div>
+
+    <div class="container blog main">
+        <h1>Text-to-Image Generation Results</h1>
+        <p class="text">
+            We evaluate our FMTT algorithm on text-to-image generation using the 4-step distilled flow map 
+            from <a target="_blank" href="https://arxiv.org/abs/2506.14603">Align Your Flow</a>, trained by 
+            distilling the <a target="_blank" href="https://huggingface.co/black-forest-labs/FLUX.1-dev">FLUX.1-dev</a> model.  
+            We consider three category of rewards: (1) human preference rewards, (2) geometric rewards, and (3) VLM-based rewards.
+        </p>
+
+    </div>
+
+
+    <!-- <div class="container blog extra-large gray">
         <div class="slide-menu">
             <ul class="dots" id="slide-menu">
                 <li class="dot active"></li>
@@ -191,7 +225,7 @@
                 <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
             </div>
             <p class="caption">
-                Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
+                1. Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
             </p>
         </div>
 
@@ -205,7 +239,7 @@
                 <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
             </div>
             <p class="caption">
-                Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
+                2. Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
             </p>
         </div>
 
@@ -221,12 +255,12 @@
                 <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
             </div>
             <p class="caption">
-                Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
+                3. Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
             </p>
         </div>
-    </div>
+    </div> -->
 
-    <div class="container blog main">
+    <!-- <div class="container blog main">
         <h1>Additional Analysis</h1>
         <h2>Observation 1</h2>
         <p class="text">
@@ -256,21 +290,10 @@
                 </p>
             </li>
         </ul>
-    </div>
-
-
-    <div class="container blog main">
-        <h1>Conclusion</h1>
-        <p class="text">
-            Per aptent diam; ut in mauris ultricies torquent conubia dolor. Aliquet venenatis sapien, dictum finibus ad dui. Finibus sollicitudin nullam consectetur malesuada molestie semper dolor. Platea eget hac cursus aptent maecenas penatibus vulputate. Ligula libero torquent sit per praesent praesent. Sodales risus mattis enim odio risus tristique. Dapibus vivamus quis scelerisque sollicitudin penatibus placerat erat. Ante aliquet vel; morbi quisque leo morbi. Ac sollicitudin imperdiet lacus integer cursus metus parturient euismod sociosqu.
-        </p>
-    </div>
+    </div> -->
 
     <div class="container blog main">
         <h1>Citation</h1>
-        <p class="text">
-            Dictumst eu himenaeos malesuada nisi eros auctor id suspendisse. Ipsum parturient est vitae proin maecenas. Nulla mollis vivamus cras nam dapibus consectetur. Id efficitur ac ultricies ornare at litora. Vestibulum nibh cursus eu gravida vivamus sem vulputate. Montes nisi ipsum urna vitae semper suscipit.
-        </p>
 <pre><code class="plaintext">@article{doe2048agi,
     title={Artificial General Intelligence},
     author={Doe John},
