@@ -1,25 +1,36 @@
 //* ======================== Slide Control ===================== */
-var contents = document.getElementsByClassName("slide-content");
+// Find all dot menus on the page
+var menus = document.getElementsByClassName("dots");
+for (let k = 0; k < menus.length; k++) {
+  let menu = menus[k];
+  menu.addEventListener("click", function(e) {
+    // Only respond to clicks on .dot elements (not the <ul> or something else)
+    if (!e.target.classList.contains('dot')) return;
+    const dots = Array.from(this.children).filter(el => el.className.indexOf('dot') > -1);
+    const idx = dots.indexOf(e.target);
 
-document.getElementById("slide-menu").addEventListener("click", function(e) {
-  const idx = [...this.children]
-    .filter(el => el.className.indexOf('dot') > -1)
-    .indexOf(e.target);
-    
-  if (idx >= 0) {
-    var prev = document.querySelector(".dot.active");
-    if (prev) prev.classList.remove("active");
-    e.target.classList.add("active");
-    
-    for (var i = 0; i < contents.length; i++) {
-      if (i == idx) {
-        contents[i].style.display = "block";
-      } else {
-        contents[i].style.display = "none";
+    if (idx >= 0) {
+      // Remove "active" from previous .dot in this menu, and set on clicked dot
+      var prev = this.querySelector(".dot.active");
+      if (prev) prev.classList.remove("active");
+      e.target.classList.add("active");
+
+      // Find the slide-content siblings. The parent .slide-menu is a sibling of several .slide-content divs (see html snippet)
+      // So this menu's parent is the slide-menu container's parent (e.g., .container)
+      // We want the .slide-content elements under the same parent as this menu
+      var container = menu.closest('.container');
+      if (!container) return;
+      var localContents = container.getElementsByClassName("slide-content");
+      for (var i = 0; i < localContents.length; i++) {
+        if (i == idx) {
+          localContents[i].style.display = "block";
+        } else {
+          localContents[i].style.display = "none";
+        }
       }
-    }  
-  }
-});
+    }
+  });
+}
 
 //* ======================== Video Control ===================== */
 function ToggleVideo(x) {

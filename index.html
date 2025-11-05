@@ -311,27 +311,27 @@
         </div>
        
         <div class="slide-content" style="display: block;">
-            <img src="assets/figures/geometric-1.png" style="width: 100%;">
+            <img src="assets/figures/geometrics/geometric-1.png" style="width: 100%;">
         </div>
 
         <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometric-2.png" style="width: 100%;">
+            <img src="assets/figures/geometrics/geometric-2.png" style="width: 100%;">
         </div>
 
         <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometric-3.png" style="width: 100%;">
+            <img src="assets/figures/geometrics/geometric-3.png" style="width: 100%;">
         </div>
 
         <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometric-4.png" style="width: 100%;">
+            <img src="assets/figures/geometrics/geometric-4.png" style="width: 100%;">
         </div>
 
         <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometric-5.png" style="width: 100%;">
+            <img src="assets/figures/geometrics/geometric-5.png" style="width: 100%;">
         </div>
 
         <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometric-6.png" style="width: 100%;">
+            <img src="assets/figures/geometrics/geometric-6.png" style="width: 100%;">
         </div>
 
         <!-- <p class="caption">
@@ -345,10 +345,11 @@
             Finally, we also explore using pretrained vision-language models (VLMs) to judge our images. 
             Specifically, we provide the generated image and a natural-language yes/no question to the VLM, and use the model's confidence in answering "Yes" as the reward. 
             This makes it possible to express complex objectives entirely through language.
+            For example, asking "Is &lt;PROMPT&gt; a correct caption for the image?" encourages the generation of images that more accurately match the prompt.
         </p>
         <p class="text">
-            For example, asking "Is &lt;PROMPT&gt; a correct caption for the image?" encourages the generation of images that more accurately match the prompt.
-            Additionally, since some VLMs can also process multiple images, we can also use them to define objectives based on similarity, composition, or contrast between multiple images.
+            Additionally, since some VLMs can also process multiple images, we can also define rewards that depend on comparisons between the generated image and 
+            additional reference images, such as style similarity and character consistency.
         </p>
         <p class="text">
             This approach provides a powerful and flexible way to steer generation toward arbitrary objectives by simply changing the prompt.
@@ -356,9 +357,7 @@
         </p>
     </div>
 
-    
-
-    <!-- <div class="container blog max gray">
+    <div class="container blog max gray">
         <div class="slideshow">
             <div class="navigation">
                 <a class="button icon" id="prev_btn"><i class="fa-solid fa-arrow-left"></i></a>
@@ -366,45 +365,49 @@
             </div>
             <div class="slider">
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-1.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-1.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-2.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-2.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-3.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-3.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-4.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-4.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-5.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-5.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-6.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-6.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-1.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-7.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-2.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-8.png" style="width: 100%;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometric-3.png" style="width: 100%;">
-                </div>
-                <div class="slider-item">
-                    <img src="assets/figures/geometric-4.png" style="width: 100%;">
-                </div>
-                <div class="slider-item">
-                    <img src="assets/figures/geometric-5.png" style="width: 100%;">
-                </div>
-                <div class="slider-item">
-                    <img src="assets/figures/geometric-6.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-9.png" style="width: 100%;">
                 </div>
             </div>
         </div>
-    </div> -->
-    
+    </div>
+
+    <div class="container blog main">
+        <p class="text">
+            Additionally, since some VLMs can also process multiple images, we can also use them to define rewards 
+            that depend on comparisons between the generated image and additional reference images, such as style similarity and character consistency. 
+            Below we show some examples.
+        </p>
+    </div>
+
+    <div class="container blog main gray-linear">
+        <img src="assets/figures/vlms/VLM-10.png"  style="width: 100%">
+        <img src="assets/figures/vlms/VLM-11.png"  style="width: 100%">
+        <img src="assets/figures/vlms/VLM-12.png"  style="width: 100%">
+    </div>
 
     <!-- <div class="container blog main">
         <h1>Additional Analysis</h1>
