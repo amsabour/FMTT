@@ -1547,6 +1547,7 @@ select {
 
 .math-parent {
   overflow-x: auto;
+  overflow-y: hidden; 
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
 }
