@@ -39,6 +39,37 @@
               }
           });
     </script>
+    <script>
+        if (window.MathJax) {
+            MathJax.startup.promise.then(() => {
+            document.querySelectorAll('mjx-container').forEach(el => {
+                el.parentElement.classList.add('math-parent');
+            });
+
+            const scaleMath = () => {
+                document.querySelectorAll('mjx-container').forEach(el => {
+                el.style.transform = '';
+                el.style.transformOrigin = 'left';
+                const parent = el.parentElement;
+
+                const parentStyle = window.getComputedStyle(parent);
+                const parentPadding = parseFloat(parentStyle.paddingLeft) + parseFloat(parentStyle.paddingRight);
+                const parentWidth = parent.clientWidth - parentPadding;
+
+                const mathWidth = el.scrollWidth;
+
+                if (mathWidth > parentWidth) {
+                    const scale = parentWidth / mathWidth;
+                    el.style.transform = `scale(${scale})`;
+                }
+                });
+            };
+
+            scaleMath();
+            window.addEventListener('resize', scaleMath);
+            });
+        }
+    </script>    
     <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
@@ -127,9 +158,13 @@
             learned neural networks.
             Specifically, these methods learn neural networks to estimate a velocity field $b_t(x_t)$ and score function $s_t(x_t)$, and solve the following SDE 
             from $t=0$ (pure noise) to $t=1$ (pure data) to produce new samples:
+        </p>
+        <div class="math-parent">
             $$
             d x_t = [b_t(x_t) + \epsilon_t s_t(x_t)] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I),
             $$
+        </div>
+        <p class="text">
             where setting $\epsilon_t = 0$ corresponds to the deterministic case, often called the probability flow ODE (PF-ODE). 
         </p>
         <p class='text'>
@@ -162,9 +197,13 @@
 
         <p class="text"> 
             A common approach is to apply <em style="font-weight: 600;">reward-guidance</em>, which injects the gradient of the reward directly into the diffusion process to nudge samples toward higher-reward regions: 
+        </p>
+        <div class="math-parent">
             $$
             dx_t = [b_t(x_t) + \epsilon_t s_t(x_t) + \color{red}{\epsilon_t \nabla r_t(x_t)}] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I).
-            $$ 
+            $$
+        </div>
+        <p class="text">
             In practice, however, most rewards (such as “text alignment” or “visual fidelity”) are only defined on clean samples $x_1$ at the end of generation. 
             Prior works address this by either 
             (1) ignoring the issue and evaluating the reward directly on the noisy state (e.g., $r_t(x) = t\,r(x)$), or 
@@ -365,31 +404,31 @@
             </div>
             <div class="slider">
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-1.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-1.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-2.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-2.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-3.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-3.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-4.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-4.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-5.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-5.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-6.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-6.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-7.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-7.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-8.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-8.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-9.png" style="width: 100%;">
+                    <img src="assets/figures/vlms/VLM-9.png" style="width: 100%; height: auto;">
                 </div>
             </div>
         </div>
