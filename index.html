@@ -116,8 +116,7 @@
         </div>
     </div>
 
-
-    <div class="container blog main first" id="blog-main">
+    <div class="container blog main first">
         <h1>
             Introduction
         </h1>
@@ -145,14 +144,8 @@
             which is referred to as the reward-tilted distribution. An active area of current research is how to best adapt the 
             dynamical equations (SDE/ODE) at inference time to generate samples from this tilted distribution. 
         </p>
-    </div>
 
-    <div class="container blog main gray-linear">
-        <img src="assets/figures/overview_fig.jpg" style="width: 100%;">
-        <p class="caption">
-            Using the flowmap $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
-            This allows better ascent on the reward, as well as remarkably simplifying the importance weights for exact sampling.
-        </p>
+        <video playsinline muted controls src="assets/videos/TrajectoryAnimation.mp4"></video>
     </div>
 
     <div class="container blog main">
@@ -170,7 +163,7 @@
         <p class="text"> 
             A common approach is to apply <em style="font-weight: 600;">reward-guidance</em>, which injects the gradient of the reward directly into the diffusion process to nudge samples toward higher-reward regions: 
             $$
-            dx_t = [b_t(x_t) + \epsilon_t s_t(x_t) + \color{green}{\epsilon_t \nabla r_t(x_t)}] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I).
+            dx_t = [b_t(x_t) + \epsilon_t s_t(x_t) + \color{red}{\epsilon_t \nabla r_t(x_t)}] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I).
             $$ 
             In practice, however, most rewards (such as “text alignment” or “visual fidelity”) are only defined on clean samples $x_1$ at the end of generation. 
             Prior works address this by either 
@@ -188,77 +181,230 @@
         </p>
     </div>
 
+    <div class="container blog main gray-linear">
+        <img src="assets/figures/overview_fig.jpg" style="width: 100%;">
+        <p class="caption">
+            Using the flowmap $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
+            This allows better ascent on the reward, as well as remarkably simplifying the importance weights for exact sampling.
+        </p>
+    </div>
+
     <div class="container blog main">
         <h1>Thermodynamic Length Analysis on MNIST</h1>
         <h2>Michael + Carles: Please fill this in. </h2>
+        <h2>Michael + Carles: Please fill this in. </h2>
+        <h2>Michael + Carles: Please fill this in. </h2>
+        <h2>Michael + Carles: Please fill this in. </h2>
         <p class="text">
-            TODO: FILL THIS IN. ADD MNIST FIGURES.
+            TODO: FILL THIS IN.
         </p>
     </div>
 
     <div class="container blog main">
         <h1>Text-to-Image Generation Results</h1>
         <p class="text">
-            We evaluate our FMTT algorithm on text-to-image generation using the 4-step distilled flow map 
-            from <a target="_blank" href="https://arxiv.org/abs/2506.14603">Align Your Flow</a>, trained by 
-            distilling the <a target="_blank" href="https://huggingface.co/black-forest-labs/FLUX.1-dev">FLUX.1-dev</a> model.  
-            We consider three category of rewards: (1) human preference rewards, (2) geometric rewards, and (3) VLM-based rewards.
+            We evaluate our FMTT algorithm on text-to-image generation using the flow map 
+            from <a target="_blank" href="https://arxiv.org/abs/2506.14603">Align Your Flow</a>, which distills 
+            the <a target="_blank" href="https://huggingface.co/black-forest-labs/FLUX.1-dev">FLUX.1-dev</a> model into a 4-step flow map.  
+            We consider three category of rewards: (1) Human Preference Rewards, (2) Geometric Rewards, and (3) VLM-Based Rewards.
         </p>
 
+        <h2>Human Preference Rewards</h2>
+        <p class="text">
+            Using human preference rewards, we can generate images with improved visual fidelity and text alignment. 
+            Following prior works, we use a linear combination of 
+            <a target="_blank" href="https://arxiv.org/abs/2305.01569">Pickscore</a>, 
+            <a target="_blank" href="https://arxiv.org/abs/2306.09341">HPSv2</a>, 
+            <a target="_blank" href="https://arxiv.org/abs/2304.05977">ImageReward</a>, and 
+            <a target="_blank" href="https://arxiv.org/abs/2103.00020">CLIP</a> as the reward function 
+            and quantitatively evaluate the performance on the 
+            <a target="_blank" href="https://arxiv.org/abs/2310.11513">GenEval</a> benchmark. 
+            This benchmark evaluates the performance of text-to-image models using approximately 550 
+            object-centric prompts and measures the quality of the generated images using pre-trained object detectors.
+        </p>
+        <p class="text">
+            A summary of the results is shown in the table below. For more details, please refer to the paper.
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead class="center">
+                        <tr>
+                            <th>Method</th>
+                            <th >Mean</th>
+                            <th>Single Obj.</th>
+                            <th>Two Obj.</th>
+                            <th>Counting</th>
+                            <th>Colors</th>
+                            <th>Position</th>
+                            <th>Attr. Binding</th>
+                        </tr>
+                    </thead>
+                    <tbody class="center">
+                        <tr>
+                            <td>FLUX.1 [dev]</td>
+                            <td>0.65</td>
+                            <td>0.99</td>
+                            <td>0.78</td>
+                            <td>0.70</td>
+                            <td>0.78</td>
+                            <td>0.18</td>
+                            <td>0.45</td>
+                        </tr>
+                        <tr>
+                            <td>FLUX.1 [dev] + Best-of-32</td>
+                            <td>0.75</td>
+                            <td>0.99</td>
+                            <td>0.94</td>
+                            <td>0.83</td>
+                            <td>0.86</td>
+                            <td>0.26</td>
+                            <td>0.57</td>
+                        </tr>
+                        <tr>
+                            <td>FMTT (4 step diffusion lookahead)</td>
+                            <td>0.75</td>
+                            <td>0.99</td>
+                            <td>0.93</td>
+                            <td>0.86</td>
+                            <td>0.89</td>
+                            <td>0.27</td>
+                            <td>0.57</td>
+                        </tr>
+                        <tr>
+                            <td>FMTT (4 step flowmap lookahead)</td>
+                            <td><span style="font-weight: 600;">0.79</span></td>
+                            <td><span style="font-weight: 600;">1.0</span></td>
+                            <td><span style="font-weight: 600;">0.97</span></td>
+                            <td><span style="font-weight: 600;">0.90</span></td>
+                            <td><span style="font-weight: 600;">0.91</span></td>
+                            <td><span style="font-weight: 600;">0.30</span></td>
+                            <td><span style="font-weight: 600;">0.64</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </p>
     </div>
 
+    <div class="container blog main">
+        <h2>Geometric Rewards</h2>
+        <p class="text">
+            A second class of rewards we consider are geometric rewards, which encourage invariance under simple geometric transformations such as masking, symmetry, or rotation.
+            These objectives make generation more controllable, enabling fine-grained layout adjustments and structured scene composition.
+        </p>
+        <p class="text">
+            By guiding the model toward outputs that achieve high geometric rewards, we can position, align, and balance elements in the image more precisely.
+            Below, we show some examples.
+        </p>
+    </div>
 
-    <!-- <div class="container blog extra-large gray">
+    <div class="container blog main gray">
         <div class="slide-menu">
             <ul class="dots" id="slide-menu">
                 <li class="dot active"></li>
                 <li class="dot"></li>
                 <li class="dot"></li>
+                <li class="dot"></li>
+                <li class="dot"></li>
+                <li class="dot"></li>
             </ul>
         </div>
        
-        <div class="slide-content", style="display: block;">
-            <div class="columns-4">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-            </div>
-            <p class="caption">
-                1. Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
-            </p>
+        <div class="slide-content" style="display: block;">
+            <img src="assets/figures/geometric-1.png" style="width: 100%;">
         </div>
 
-        <div class="slide-content", style="display: none;">
-            <div class="columns-6">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-            </div>
-            <p class="caption">
-                2. Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
-            </p>
+        <div class="slide-content" style="display: none;">
+            <img src="assets/figures/geometric-2.png" style="width: 100%;">
         </div>
 
-        <div class="slide-content", style="display: none;">
-            <div class="columns-8">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
-                <img src="https://clickprops.co.uk/wp-content/uploads/2022/05/PP15PS-California-Blue.jpg">
+        <div class="slide-content" style="display: none;">
+            <img src="assets/figures/geometric-3.png" style="width: 100%;">
+        </div>
+
+        <div class="slide-content" style="display: none;">
+            <img src="assets/figures/geometric-4.png" style="width: 100%;">
+        </div>
+
+        <div class="slide-content" style="display: none;">
+            <img src="assets/figures/geometric-5.png" style="width: 100%;">
+        </div>
+
+        <div class="slide-content" style="display: none;">
+            <img src="assets/figures/geometric-6.png" style="width: 100%;">
+        </div>
+
+        <!-- <p class="caption">
+            Nothing.
+        </p> -->
+    </div>
+
+    <div class="container blog main">
+        <h2>VLM-Based Rewards</h2>
+        <p class="text">
+            Finally, we also explore using pretrained vision-language models (VLMs) to judge our images. 
+            Specifically, we provide the generated image and a natural-language yes/no question to the VLM, and use the model's confidence in answering "Yes" as the reward. 
+            This makes it possible to express complex objectives entirely through language.
+        </p>
+        <p class="text">
+            For example, asking "Is &lt;PROMPT&gt; a correct caption for the image?" encourages the generation of images that more accurately match the prompt.
+            Additionally, since some VLMs can also process multiple images, we can also use them to define objectives based on similarity, composition, or contrast between multiple images.
+        </p>
+        <p class="text">
+            This approach provides a powerful and flexible way to steer generation toward arbitrary objectives by simply changing the prompt.
+            Below we show several examples.
+        </p>
+    </div>
+
+    
+
+    <!-- <div class="container blog max gray">
+        <div class="slideshow">
+            <div class="navigation">
+                <a class="button icon" id="prev_btn"><i class="fa-solid fa-arrow-left"></i></a>
+                <a class="button icon" id="next_btn"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <p class="caption">
-                3. Nulla quis porttitor varius phasellus dolor curae primis. Suscipit sit adipiscing nibh justo hac. Turpis massa ridiculus sit, finibus quis litora sagittis torquent. Dignissim suscipit quam curabitur sit velit, rhoncus tincidunt purus? At netus efficitur penatibus purus amet urna etiam. Leo neque ligula varius lacinia torquent vehicula. Tempus non mauris vel placerat natoque.
-            </p>
+            <div class="slider">
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-1.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-2.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-3.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-4.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-5.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-6.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-1.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-2.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-3.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-4.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-5.png" style="width: 100%;">
+                </div>
+                <div class="slider-item">
+                    <img src="assets/figures/geometric-6.png" style="width: 100%;">
+                </div>
+            </div>
         </div>
     </div> -->
+    
 
     <!-- <div class="container blog main">
         <h1>Additional Analysis</h1>
