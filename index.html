@@ -345,7 +345,7 @@
             </div>
             <div class="slider">
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-1.png" style="width: 100%; height: auto;">
+                    <img src="assets/figures/geometrics/geometric-1-v2.png" style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
                     <img src="assets/figures/geometrics/geometric-2.png" style="width: 100%; height: auto;">
@@ -416,10 +416,6 @@
             For example, asking "Is &lt;PROMPT&gt; a correct caption for the image?" encourages the generation of images that more accurately match the prompt.
         </p>
         <p class="text">
-            Additionally, since some VLMs can also process multiple images, we can also define rewards that depend on comparisons between the generated image and 
-            additional reference images, such as style similarity and character consistency.
-        </p>
-        <p class="text">
             This approach provides a powerful and flexible way to steer generation toward arbitrary objectives by simply changing the prompt.
             Below we show several examples.
         </p>
@@ -467,6 +463,10 @@
         <p class="text">
             Additionally, since some VLMs can also process multiple images, we can also use them to define rewards 
             that depend on comparisons between the generated image and additional reference images, such as style similarity and character consistency. 
+        </p>
+        <p class="text">
+            In these experiments, the examples from the base FLUX.1 [dev] model are generated using only the text prompt without the reference image. 
+            For FLUX + FMTT, the reference image and the generated image are fed to the VLM and the VLM question is used to compute the reward. 
             Below we show some examples.
         </p>
     </div>
