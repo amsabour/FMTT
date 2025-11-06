@@ -146,6 +146,18 @@ function RestartVideo(x) {
 
 
 // * ======================== Slide Show Control ===================== */
+function toPx(value, slider) {
+  if (value == null || value === '') return NaN;
+  const sliderWidth = slider.clientWidth || slider.offsetWidth;
+  const sliderHeight = slider.clientHeight || slider.offsetHeight;
+  const s = String(value).trim();
+  if (s.endsWith('vw')) return (parseFloat(s) / 100) * sliderWidth;
+  if (s.endsWith('vh')) return (parseFloat(s) / 100) * sliderHeight;
+  if (s.endsWith('px')) return parseFloat(s);
+  const n = Number(s);
+  return Number.isFinite(n) ? n : NaN;
+}
+
 document.querySelectorAll('.slideshow').forEach((host) => {
   const slider   = host.querySelector('.slider');
   const btnLeft  = host.querySelector('.prev_btn');
@@ -156,9 +168,15 @@ document.querySelectorAll('.slideshow').forEach((host) => {
   let offset = 20;
 
   // Base width per slideshow (fallback 400). Step is base + 40 (padding-left in CSS).
-  const base = Number(host.dataset.width) || 400;
-  const step = base + 40;
-  console.log("Step: " + step);
+  // const base = Number(host.dataset.width) || 400;
+  // const step = base + 40;
+  // console.log("Step: " + step);
+  let base = toPx(host.dataset.width, slider);
+  let padding = toPx(host.dataset.padding, slider);
+  if (!Number.isFinite(base)) base = 400;
+  if (!Number.isFinite(padding)) padding = 20;
+  let step = base + 2 * padding;
+  console.log('Step:', step);
 
   const setPositions = () => {
     [...slider.children].forEach((item, i) => {
@@ -186,7 +204,7 @@ document.querySelectorAll('.slideshow').forEach((host) => {
   };
 
   const startAuto = () => {
-    if (!interval) interval = setInterval(() => next(true), 2000);
+    if (!interval) interval = setInterval(() => next(true), 3000);
   };
   const stopAuto = () => {
     clearInterval(interval);
@@ -194,10 +212,17 @@ document.querySelectorAll('.slideshow').forEach((host) => {
   };
 
   const recalc = () => {
+    const parsed = toPx(host.dataset.width, slider);
+    const parsedPadding = toPx(host.dataset.padding, slider);
+    base = Number.isFinite(parsed) ? parsed : 400;
+    padding = Number.isFinite(parsedPadding) ? parsedPadding : 20;
+    step = base + 2 * padding;
+
     const sliderWidth = slider.clientWidth || slider.offsetWidth;
     const remainderWidth = (sliderWidth % step);
-    offset = (20 + remainderWidth / 2);
+    offset = (padding + remainderWidth / 2);
     console.log(offset);
+    setTransitionSpeed('0.01s'); // force immediate transition
     setPositions();
   };
   
