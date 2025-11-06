@@ -167,16 +167,11 @@ document.querySelectorAll('.slideshow').forEach((host) => {
   let interval;
   let offset = 20;
 
-  // Base width per slideshow (fallback 400). Step is base + 40 (padding-left in CSS).
-  // const base = Number(host.dataset.width) || 400;
-  // const step = base + 40;
-  // console.log("Step: " + step);
   let base = toPx(host.dataset.width, slider);
   let padding = toPx(host.dataset.padding, slider);
   if (!Number.isFinite(base)) base = 400;
   if (!Number.isFinite(padding)) padding = 20;
   let step = base + 2 * padding;
-  console.log('Step:', step);
 
   function updateSliderHeight() {
     let max = 0;
@@ -235,7 +230,6 @@ document.querySelectorAll('.slideshow').forEach((host) => {
     const sliderWidth = slider.clientWidth || slider.offsetWidth;
     const remainderWidth = (sliderWidth % step);
     offset = (padding + remainderWidth / 2);
-    console.log(offset);
     setTransitionSpeed('0.01s'); // force immediate transition
     setPositions();
   };
