@@ -1261,7 +1261,7 @@ select:after {
   left: 0;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  padding-left: 40px;
+  padding-right: 40px;
 }
 .slideshow .slider .slider-item video {
   display: block;

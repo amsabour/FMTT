@@ -95,51 +95,124 @@ function RestartVideo(x) {
   msg.style.animation = null; 
 };
 
-//* ======================== Slide Show Control ===================== */
-const slider = document.querySelector('.container .slider');
-const [btnLeft, btnRight] = ['prev_btn', 'next_btn'].map(id => document.getElementById(id));
-let interval;
+// //* ======================== Slide Show Control ===================== */
+// const slider = document.querySelector('.container .slider');
+// const [btnLeft, btnRight] = ['prev_btn', 'next_btn'].map(id => document.getElementById(id));
+// let interval;
 
-// Set positions
-const setPositions = () => 
-    [...slider.children].forEach((item, i) => 
-        item.style.left = `${(i-1) * 440}px`);
+// // Set positions
+// const setPositions = () => 
+//     [...slider.children].forEach((item, i) => 
+//         item.style.left = `${(i-1) * 440}px`);
 
-// Initial setup
-setPositions();
+// // Initial setup
+// setPositions();
 
-// Set transition speed
-const setTransitionSpeed = (speed) => {
-    [...slider.children].forEach(item => 
-        item.style.transitionDuration = speed);
-};
+// // Set transition speed
+// const setTransitionSpeed = (speed) => {
+//     [...slider.children].forEach(item => 
+//         item.style.transitionDuration = speed);
+// };
 
-// Slide functions
-const next = (isAuto = false) => { 
+// // Slide functions
+// const next = (isAuto = false) => { 
+//     setTransitionSpeed(isAuto ? '1.5s' : '0.2s');
+//     slider.appendChild(slider.firstElementChild); 
+//     setPositions(); 
+// };
+
+// const prev = () => { 
+//     setTransitionSpeed('0.2s');
+//     slider.prepend(slider.lastElementChild); 
+//     setPositions(); 
+// };
+
+// // Auto slide
+// const startAuto = () => interval = interval || setInterval(() => next(true), 2000);
+// const stopAuto = () => { clearInterval(interval); interval = null; };
+
+// // Event listeners
+// btnRight.addEventListener('click', () => next(false));
+// btnLeft.addEventListener('click', prev);
+
+// // Mouse hover controls
+// [slider, btnLeft, btnRight].forEach(el => {
+//     el.addEventListener('mouseover', stopAuto);
+//     el.addEventListener('mouseout', startAuto);
+// });
+
+// // Start auto slide
+// startAuto();
+
+
+// * ======================== Slide Show Control ===================== */
+document.querySelectorAll('.slideshow').forEach((host) => {
+  const slider   = host.querySelector('.slider');
+  const btnLeft  = host.querySelector('.prev_btn');
+  const btnRight = host.querySelector('.next_btn');
+  if (!slider || !btnLeft || !btnRight) return;
+
+  let interval;
+  let offset = 20;
+
+  // Base width per slideshow (fallback 400). Step is base + 40 (padding-left in CSS).
+  const base = Number(host.dataset.width) || 400;
+  const step = base + 40;
+  console.log("Step: " + step);
+
+  const setPositions = () => {
+    [...slider.children].forEach((item, i) => {
+      item.style.left = `${(i - 2) * step + offset}px`;
+      item.style.width = `${base}px`;
+    });
+  };
+
+  const setTransitionSpeed = (speed) => {
+    [...slider.children].forEach((item) => {
+      item.style.transitionDuration = speed;
+    });
+  };
+
+  const next = (isAuto = false) => {
     setTransitionSpeed(isAuto ? '1.5s' : '0.2s');
-    slider.appendChild(slider.firstElementChild); 
-    setPositions(); 
-};
+    slider.appendChild(slider.firstElementChild);
+    setPositions();
+  };
 
-const prev = () => { 
+  const prev = () => {
     setTransitionSpeed('0.2s');
-    slider.prepend(slider.lastElementChild); 
-    setPositions(); 
-};
+    slider.prepend(slider.lastElementChild);
+    setPositions();
+  };
 
-// Auto slide
-const startAuto = () => interval = interval || setInterval(() => next(true), 2000);
-const stopAuto = () => { clearInterval(interval); interval = null; };
+  const startAuto = () => {
+    if (!interval) interval = setInterval(() => next(true), 2000);
+  };
+  const stopAuto = () => {
+    clearInterval(interval);
+    interval = null;
+  };
 
-// Event listeners
-btnRight.addEventListener('click', () => next(false));
-btnLeft.addEventListener('click', prev);
+  const recalc = () => {
+    const sliderWidth = slider.clientWidth || slider.offsetWidth;
+    const remainderWidth = (sliderWidth % step);
+    offset = (20 + remainderWidth / 2);
+    console.log(offset);
+    setPositions();
+  };
+  
+  // run once and whenever the viewport changes
+  recalc();
+  window.addEventListener('resize', recalc);
 
-// Mouse hover controls
-[slider, btnLeft, btnRight].forEach(el => {
+  btnRight.addEventListener('click', () => next(false));
+  btnLeft.addEventListener('click', prev);
+
+  [slider, btnLeft, btnRight].forEach((el) => {
     el.addEventListener('mouseover', stopAuto);
     el.addEventListener('mouseout', startAuto);
-});
+  });
 
-// Start auto slide
-startAuto();
+  setPositions();
+  startAuto();
+});
