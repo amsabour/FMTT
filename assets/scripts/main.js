@@ -178,11 +178,25 @@ document.querySelectorAll('.slideshow').forEach((host) => {
   let step = base + 2 * padding;
   console.log('Step:', step);
 
+  function updateSliderHeight() {
+    let max = 0;
+    slider.querySelectorAll('.slider-item img, .slider-item video').forEach((el) => {
+      const natW = el.naturalWidth  || el.videoWidth  || el.clientWidth;
+      const natH = el.naturalHeight || el.videoHeight || el.clientHeight;
+      if (natW > 0) {
+        const scaledH = (natH / natW) * base; // base is the computed slide width
+        if (scaledH > max) max = scaledH;
+      }
+    });
+    if (max > 0) slider.style.height = `${Math.ceil(max)}px`;
+  }
+
   const setPositions = () => {
     [...slider.children].forEach((item, i) => {
       item.style.left = `${(i - 2) * step + offset}px`;
       item.style.width = `${base}px`;
     });
+    updateSliderHeight();
   };
 
   const setTransitionSpeed = (speed) => {
