@@ -1568,3 +1568,23 @@ select {
 .MathJax_Display::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Magnification stuff */
+.image-container {
+  position: relative;
+  text-align: center;
+}
+
+.magnifier {
+  position: absolute;
+  border: 3px solid #000;
+  border-radius: 15%;
+  cursor: none;
+  width:  150px; /* Size of the magnifying circle */
+  height: 150px;
+  overflow: hidden;
+  display: none; /* Hide by default */
+  pointer-events: none;
+  z-index: 1000;
+}
+

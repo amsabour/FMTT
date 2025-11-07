@@ -461,14 +461,62 @@
         <p class="text">
             In these experiments, the examples from the base FLUX.1 [dev] model are generated using only the text prompt without the reference image. 
             For FLUX + FMTT, the reference image and the generated image are fed to the VLM and the VLM question is used to compute the reward. 
-            Below we show some examples.
+            Below we show some examples. <b>Hover over the images for zoom-ins.</b>
         </p>
     </div>
 
-    <div class="container blog large gray-linear">
-        <!-- <img src="assets/figures/vlms/VLM-10.png"  style="width: 100%"> -->
+    <!-- <div class="container blog large gray-linear">
         <img src="assets/figures/vlms/VLM-11.png"  style="width: 100%">
         <img src="assets/figures/vlms/VLM-12.png"  style="width: 100%">
+    </div> -->
+
+    <div class="container blog large gray-linear">
+        <div class="columns-3">
+            <p class="text" style="text-align: center; font-weight: 600; font-size: x-large;">FLUX.1 [dev]</p>
+            <p class="text" style="text-align: center; font-weight: 600; font-size: x-large;">Reference Image</p>
+            <p class="text" style="text-align: center; font-weight: 600; font-size: x-large;">FLUX + FMTT</p>
+        </div>
+        <div>
+            <div class="columns-3 wrapper">
+                <figure class="image-container">
+                    <img width="95%" src="assets/figures/vlms/VLM-11-1.png" style="margin-bottom: 0px;">
+                    <div class="magnifier"></div>
+                </figure>
+      
+                <figure class="image-container">
+                    <img width="95%" src="assets/figures/vlms/VLM-11-2.png" style="margin-bottom: 0px;">
+                    <!-- <div class="magnifier" style="opacity: 0;"></div> -->
+                </figure>
+    
+                <figure class="image-container">
+                    <img width="95%" src="assets/figures/vlms/VLM-11-3.png" style="margin-bottom: 0px;">
+                    <div class="magnifier"></div>
+                </figure>
+            </div>
+            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>Prompt: "a Van Gogh style painting of a dog"</em></p>
+            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>VLM Question: "Do these two images have the same art style?"</em></p>
+        </div>
+        <p class="text"></p>
+        <div>
+            <div class="columns-3 wrapper">
+                <figure class="image-container">
+                    <img width="95%" src="assets/figures/vlms/VLM-12-1.png" style="margin-bottom: 0px;">
+                    <div class="magnifier"></div>
+                </figure>
+      
+                <figure class="image-container">
+                    <img width="95%" src="assets/figures/vlms/VLM-12-2.png" style="margin-bottom: 0px;">
+                    <!-- <div class="magnifier" style="opacity: 0;"></div> -->
+                </figure>
+    
+                <figure class="image-container">
+                    <img width="95%" src="assets/figures/vlms/VLM-12-3.png" style="margin-bottom: 0px;">
+                    <div class="magnifier"></div>
+                </figure>
+            </div>
+            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>Prompt: "a cute grumpy cartoon mushroom character with a large brown mushroom cap walking his dog"</em></p>
+            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>VLM Question: "Are these two images of the exact same character?"</em></p>
+        </div>
     </div>
 
     <!-- <div class="container blog large">
@@ -527,6 +575,85 @@
     <script>hljs.initHighlightingOnLoad();</script>
     <script src="clarity/clarity.js"></script>    
     <script src="assets/scripts/main.js"></script>    
+
+    <script>
+        function preloadImage(url) {
+          const img = new Image();
+          img.src = url;
+        }
+
+        document.querySelectorAll('.wrapper').forEach(wrapper => {
+          wrapper.querySelectorAll('.image-container img').forEach((img) => {
+            const magnifier = img.parentElement.querySelector('.magnifier');
+            if (magnifier) {
+                magnifier.style.backgroundImage = 'url(' + (img.dataset.src_original ?? img.src) + ')';
+                preloadImage(img.dataset.src_original ?? img.src);
+                preloadImage(img.dataset.src_zoomed ?? img.src);
+                img.addEventListener('mousemove', (e) => magnify(e, wrapper));
+                img.addEventListener('mouseleave', (e) => hideMagnifier(wrapper));
+            }
+          });
+        });
+    
+        function magnify(e, wrapper) {
+          const magnifiers = wrapper.querySelectorAll('.magnifier');
+          let zoomFactor = parseFloat(wrapper.dataset.zoom_level) || 3;
+          let windowSizeX = parseFloat(wrapper.dataset.window_size_x) || 0.33;
+          let windowSizeY = parseFloat(wrapper.dataset.window_size_y) || 0.33;
+          
+          let target = e.currentTarget;
+          let x = e.offsetX;
+          let y = e.offsetY;
+          let xPercent = x / target.offsetWidth;
+          let yPercent = y / target.offsetHeight;
+    
+          // Clamp values to be inside the box
+          xPercent = Math.max(windowSizeX / 2, Math.min(xPercent, 1.0 - windowSizeX / 2));
+          yPercent = Math.max(windowSizeY / 2, Math.min(yPercent, 1.0 - windowSizeY / 2));
+          x = xPercent * target.width;
+          y = yPercent * target.height;
+    
+    
+          magnifiers.forEach((magnifier) => {
+            const img = magnifier.previousElementSibling;
+            const magnifierSize = magnifier.offsetWidth / 2;
+    
+            const originalSrc = img.dataset.src_original ?? img.src;
+            const zoomedSrc = img.dataset.src_zoomed ?? img.src;
+    
+            img.src = originalSrc;
+    
+            // Calculate the position for the background image
+            const bgX = (xPercent * img.offsetWidth);
+            const bgY = (yPercent * img.offsetHeight);
+    
+            magnifier.style.display = 'block';
+            magnifier.style.boxSizing = "border-box";
+            magnifier.style.width = (windowSizeX * img.offsetWidth * zoomFactor) + 'px';
+            magnifier.style.height = (windowSizeY * img.offsetHeight * zoomFactor) + 'px';
+    
+            magnifier.style.left = (x - magnifier.offsetWidth / 2 + 0.5 * (img.parentElement.offsetWidth - img.offsetWidth)) + 'px';
+            magnifier.style.top = (y - magnifier.offsetHeight / 2 + 0.5 * (img.parentElement.offsetHeight - img.offsetHeight)) + 'px';
+    
+            magnifier.style.backgroundSize = `${img.offsetWidth * zoomFactor}px ${img.offsetHeight * zoomFactor}px`;
+            let bgTrueX = Math.max(0, bgX * zoomFactor - magnifier.offsetWidth / 2);
+            let bgTrueY = Math.max(0, bgY * zoomFactor - magnifier.offsetHeight / 2);
+            magnifier.style.backgroundPosition = '-' + (bgTrueX) + 'px -' + (bgTrueY) + 'px';
+          });
+        }
+    
+        function hideMagnifier(wrapper) {
+          wrapper.querySelectorAll('.magnifier').forEach(magnifier => {
+            magnifier.style.display = 'none';
+    
+            const img = magnifier.previousElementSibling;
+            const originalSrc = img.dataset.src_original ?? img.src;
+            const zoomedSrc = img.dataset.src_zoomed ?? img.src;
+            img.src = zoomedSrc;
+          });
+        } 
+      </script>
+    
 
     <!-- <style>
         #first-content { transition: background 300ms ease, color 300ms ease; }
