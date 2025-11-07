@@ -80,7 +80,7 @@
     <!-- Title Page -->
     <!-- Dark Theme Example: Change the background colour dark and change the following div "blog-title" into "blog-title white". -->
 
-    <div class="container blog" id="first-content">
+    <div class="container blog" id="first-content" style="background: linear-gradient(180deg, #E7F8EF 0%, #F8F1E7 100%);">
         <!-- If you don't have a project cover: Change "blog-title" into "blog-title no-cover"  -->
         <div class="blog-title">
             <div class="blog-intro">
@@ -183,7 +183,6 @@
 
     <div class="container blog large">
         <h1>Sampling from the Reward-Tilted Distribution</h1>
-
         <p class="text">
             Efforts to align diffusion models for high-reward generation can be broadly divided into <em>training-based</em> and <em>training-free</em> approaches. 
             Training-based methods, often referred to as diffusion alignment techniques, optimize the model parameters so that the retrained model naturally produces higher-reward samples. 
@@ -192,7 +191,6 @@
             making them far more flexible when working with multiple or rapidly changing rewards.
             In this work, we focus on training-free methods.
         </p>
-
         <p class="text"> 
             A common approach is to apply <em style="font-weight: 600;">reward-guidance</em>, which injects the gradient of the reward directly into the diffusion process 
             to nudge samples toward higher-reward regions: 
@@ -530,7 +528,7 @@
     <script src="clarity/clarity.js"></script>    
     <script src="assets/scripts/main.js"></script>    
 
-    <style>
+    <!-- <style>
         #first-content { transition: background 300ms ease, color 300ms ease; }
         #gradientControls {
           position: fixed; right: 12px; bottom: 12px; z-index: 9999;
@@ -590,7 +588,7 @@
           prevBtn.addEventListener('click', () => { i = (i - 1 + gradients.length) % gradients.length; apply(i); });
           nextBtn.addEventListener('click', () => { i = (i + 1) % gradients.length; apply(i); });
         })();
-      </script>
+      </script> -->
     
 </body>
 </html>
