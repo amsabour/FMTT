@@ -28,7 +28,7 @@
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             "HTML-CSS": {
-              scale: 95,
+              scale: 105,
               fonts: ["Gyre-Pagella"],
               imageFont: null,
               undefinedFamily: "'Arial Unicode MS', cmbright"
@@ -39,7 +39,7 @@
               }
           });
     </script>
-    <script>
+    <!-- <script>
         if (window.MathJax) {
             MathJax.startup.promise.then(() => {
             document.querySelectorAll('mjx-container').forEach(el => {
@@ -66,10 +66,10 @@
             };
 
             scaleMath();
-            window.addEventListener('resize', scaleMath);
+                window.addEventListener('resize', scaleMath);
             });
         }
-    </script>    
+    </script>     -->
     <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
@@ -79,7 +79,8 @@
 <body>
     <!-- Title Page -->
     <!-- Dark Theme Example: Change the background colour dark and change the following div "blog-title" into "blog-title white". -->
-    <div class="container blog" id="first-content" style="background-color: #E0E4E6;">
+
+    <div class="container blog" id="first-content">
         <!-- If you don't have a project cover: Change "blog-title" into "blog-title no-cover"  -->
         <div class="blog-title">
             <div class="blog-intro">
@@ -147,7 +148,7 @@
         </div>
     </div>
 
-    <div class="container blog main first">
+    <div class="container blog large first">
         <h1>
             Introduction
         </h1>
@@ -158,13 +159,9 @@
             learned neural networks.
             Specifically, these methods learn neural networks to estimate a velocity field $b_t(x_t)$ and score function $s_t(x_t)$, and solve the following SDE 
             from $t=0$ (pure noise) to $t=1$ (pure data) to produce new samples:
-        </p>
-        <div class="math-parent">
             $$
             d x_t = [b_t(x_t) + \epsilon_t s_t(x_t)] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I),
             $$
-        </div>
-        <p class="text">
             where setting $\epsilon_t = 0$ corresponds to the deterministic case, often called the probability flow ODE (PF-ODE). 
         </p>
         <p class='text'>
@@ -172,18 +169,19 @@
             the model's distribution $p(x)$ that have high scores under some user-defined reward function $r(x)$. 
             Concretely, the goal is to generate samples from a distribution $q(x)$ that maximizes the following objective:
             $$
-            \arg\max_{q} \left[\mathbb{E}_{q}[r(x)] - \lambda \times \mathrm{KL}(q \,\|\, p)\right]
+            \arg\max_{q} \left[\mathbb{E}_{q}[r(x)] - \lambda \times \mathrm{KL}(q \,\|\, p)\right],
             $$
             where $\lambda$ is a hyperparameter that controls the trade-off between the reward and deviating from the base distribution. 
             This problem has a closed-form solution: $q(x) \propto p(x) \exp(r(x) / \lambda)$,
             which is referred to as the reward-tilted distribution. An active area of current research is how to best adapt the 
             dynamical equations (SDE/ODE) at inference time to generate samples from this tilted distribution. 
         </p>
-
+    </div>
+    <div class="container blog main first">
         <video playsinline muted controls autoplay loop src="assets/videos/TrajectoryAnimation.mp4"></video>
     </div>
 
-    <div class="container blog main">
+    <div class="container blog large">
         <h1>Sampling from the Reward-Tilted Distribution</h1>
 
         <p class="text">
@@ -196,13 +194,12 @@
         </p>
 
         <p class="text"> 
-            A common approach is to apply <em style="font-weight: 600;">reward-guidance</em>, which injects the gradient of the reward directly into the diffusion process to nudge samples toward higher-reward regions: 
-        </p>
-        <div class="math-parent">
+            A common approach is to apply <em style="font-weight: 600;">reward-guidance</em>, which injects the gradient of the reward directly into the diffusion process 
+            to nudge samples toward higher-reward regions: 
             $$
             dx_t = [b_t(x_t) + \epsilon_t s_t(x_t) + \color{red}{\epsilon_t \nabla r_t(x_t)}] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I).
             $$
-        </div>
+        </p>
         <p class="text">
             In practice, however, most rewards (such as “text alignment” or “visual fidelity”) are only defined on clean samples $x_1$ at the end of generation. 
             Prior works address this by either 
@@ -210,7 +207,6 @@
             (2) using the denoiser $D(x_t) = \mathbb{E}[x_1 | x_t]$ to approximate the final image (e.g., $r_t(x) = t\,r(D(x_t))$). 
             Both strategies evaluate the reward at states that are not yet fully generated, leading to unreliable gradients, especially in the early stages of sampling.
         </p>
-
         <p class="text">
             Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. Specifically, FMTT proposes using the flow map, which is a function $X_{t, 1}(x_t)$
             that can traverse the probability flow ODE to accurately estimate the final state $x_1$ of each intermediate state $x_t$. By using the flowmap as a 
@@ -220,7 +216,7 @@
         </p>
     </div>
 
-    <div class="container blog main gray-linear">
+    <div class="container blog large gray-linear">
         <img src="assets/figures/overview_fig.jpg" style="width: 100%;">
         <p class="caption">
             Using the flowmap $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
@@ -228,7 +224,7 @@
         </p>
     </div>
 
-    <div class="container blog main">
+    <div class="container blog large">
         <h1>Thermodynamic Length Analysis on MNIST</h1>
         <h2>Michael + Carles: Please fill this in. </h2>
         <h2>Michael + Carles: Please fill this in. </h2>
@@ -239,7 +235,7 @@
         </p>
     </div>
 
-    <div class="container blog main">
+    <div class="container blog large">
         <h1>Text-to-Image Generation Results</h1>
         <p class="text">
             We evaluate our FMTT algorithm on text-to-image generation using the flow map 
@@ -325,7 +321,7 @@
         </p>
     </div>
 
-    <div class="container blog main">
+    <div class="container blog large">
         <h2>Geometric Rewards</h2>
         <p class="text">
             A second class of rewards we consider are geometric rewards, which encourage invariance under simple geometric transformations such as masking, symmetry, or rotation.
@@ -337,8 +333,8 @@
         </p>
     </div>
 
-    <div class="container blog extra-large gray">
-        <div class="slideshow" data-width="85vw" data-padding="2vw">
+    <div class="container blog extra-large gray-linear">
+        <div class="slideshow" data-width="85vw" data-padding="5vw">
             <div class="navigation">
                 <a class="button icon prev_btn"><i class="fa-solid fa-arrow-left"></i></a>
                 <a class="button icon next_btn"><i class="fa-solid fa-arrow-right"></i></a>
@@ -407,7 +403,7 @@
         </p> 
     </div> -->
 
-    <div class="container blog main">
+    <div class="container blog large">
         <h2>VLM-Based Rewards</h2>
         <p class="text">
             Finally, we also explore using pretrained vision-language models (VLMs) to judge our images. 
@@ -421,8 +417,8 @@
         </p>
     </div>
 
-    <div class="container blog extra-large gray">
-        <div class="slideshow" data-width="45vw" data-padding="2vw">
+    <div class="container blog extra-large gray-linear">
+        <div class="slideshow" data-width="60vw" data-padding="15vw">
             <div class="navigation">
                 <a class="button icon prev_btn"><i class="fa-solid fa-arrow-left"></i></a>
                 <a class="button icon next_btn"><i class="fa-solid fa-arrow-right"></i></a>
@@ -459,7 +455,7 @@
         </div>
     </div>
 
-    <div class="container blog main">
+    <div class="container blog large">
         <p class="text">
             Additionally, since some VLMs can also process multiple images, we can also use them to define rewards 
             that depend on comparisons between the generated image and additional reference images, such as style similarity and character consistency. 
@@ -477,7 +473,7 @@
         <img src="assets/figures/vlms/VLM-12.png"  style="width: 100%">
     </div>
 
-    <!-- <div class="container blog main">
+    <!-- <div class="container blog large">
         <h1>Additional Analysis</h1>
         <h2>Observation 1</h2>
         <p class="text">
@@ -509,7 +505,7 @@
         </ul>
     </div> -->
 
-    <div class="container blog main">
+    <div class="container blog large">
         <h1>Citation</h1>
 <pre><code class="plaintext">@article{doe2048agi,
     title={Artificial General Intelligence},
@@ -533,5 +529,68 @@
     <script>hljs.initHighlightingOnLoad();</script>
     <script src="clarity/clarity.js"></script>    
     <script src="assets/scripts/main.js"></script>    
-    </html>
+
+    <style>
+        #first-content { transition: background 300ms ease, color 300ms ease; }
+        #gradientControls {
+          position: fixed; right: 12px; bottom: 12px; z-index: 9999;
+          display: flex; gap: 8px; align-items: center;
+          background: rgba(255,255,255,0.85);
+          padding: 6px 8px; border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          backdrop-filter: saturate(140%) blur(8px);
+        }
+        #gradientControls button {
+          appearance: none; border: 1px solid rgba(0,0,0,0.15);
+          background: #fff; color: #111; padding: 6px 10px; border-radius: 6px;
+          font: 13px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; cursor: pointer;
+        }
+        #gradientControls span {
+          font: 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #111;
+          white-space: nowrap;
+        }
+      </style>
+      <div id="gradientControls" role="group" aria-label="Gradient controls">
+        <button id="prevGradient" type="button" aria-label="Previous gradient">← Prev</button>
+        <span id="gradientName">1/9 – Soft Sky → Peach</span>
+        <button id="nextGradient" type="button" aria-label="Next gradient">Next →</button>
+      </div>
+      <script>
+        (function () {
+          const gradients = [
+            // { name: 'Soft Sky → Peach', background: 'linear-gradient(135deg, #E6F4FF 0%, #FFF4E6 100%)' },
+            // { name: 'Mint → Lavender', background: 'linear-gradient(135deg, #EAF5EE 0%, #F1E8FF 100%)' },
+            // { name: 'Blush → Periwinkle', background: 'linear-gradient(135deg, #FFE4E6 0%, #E0E7FF 100%)' },
+            { name: 'Sage → Sand', background: 'linear-gradient(135deg, #E7F3EF 0%, #F8F1E7 100%)' },
+            { name: 'Sage → Sand', background: 'linear-gradient(180deg, #E7F8EF 0%, #F8F1E7 100%)' },
+            { name: 'Fresh Green → Soft Blue', background: 'linear-gradient(135deg, #DCFCE7 0%, #DBEAFE 100%)' },
+            // { name: 'Clean Neutrals', background: 'linear-gradient(135deg, #F8FAFC 0%, #E5E7EB 100%)' },
+            // { name: '3-Stop Pastel', background: 'linear-gradient(135deg, #E6F4FF 0%, #F3E8FF 50%, #FFF4E6 100%)' },
+            // { name: 'Radial Glow', background: 'radial-gradient(1200px circle at 20% 15%, #E6F4FF 0%, #F8FAFC 50%, #FFFFFF 100%)' },
+          ];
+  
+          const target = document.getElementById('first-content');
+          if (!target) return;
+  
+          const nameEl = document.getElementById('gradientName');
+          const prevBtn = document.getElementById('prevGradient');
+          const nextBtn = document.getElementById('nextGradient');
+  
+          let i = 0;
+  
+          function apply(idx) {
+            const g = gradients[idx];
+            target.style.background = g.background;
+            target.style.color = g.color || '';
+            if (nameEl) nameEl.textContent = (idx + 1) + '/' + gradients.length + ' – ' + g.name;
+          }
+  
+          apply(i);
+  
+          prevBtn.addEventListener('click', () => { i = (i - 1 + gradients.length) % gradients.length; apply(i); });
+          nextBtn.addEventListener('click', () => { i = (i + 1) % gradients.length; apply(i); });
+        })();
+      </script>
+    
 </body>
+</html>

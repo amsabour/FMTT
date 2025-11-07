@@ -570,7 +570,7 @@ div.container.blog.gray-linear p.caption {
   }
   div.container.blog#first-content div.blog-title .blog-cover {
     margin: 0 0 0 auto;
-    width: 90%;
+    width: 115%;
     padding: 3vh 0;
   }
   div.container.blog#first-content div.blog-title .blog-intro {
@@ -936,6 +936,7 @@ input[type=submit].icon i, input[type=reset].icon i, input[type=button].icon i,
 button.icon i, .button.icon i {
   font-size: 1.2em;
   padding-left: 0.5em;
+  padding-right: 0.5em;
   padding-bottom: 1px;
 }
 input[type=submit].project, input[type=reset].project, input[type=button].project,
@@ -1543,28 +1544,27 @@ select {
   font-size: 70%;
 }/*# sourceMappingURL=main_free.css.map */
 
-
-
-.math-parent {
+/* ======================== Overflowing MathJax Equations ===================== */
+.MathJax_Display {
   overflow-x: auto;
   overflow-y: hidden; 
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
 }
 
-.math-parent::-webkit-scrollbar {
+.MathJax_Display::-webkit-scrollbar {
   height: 5px;
 }
 
-.math-parent::-webkit-scrollbar-track {
+.MathJax_Display::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
-.math-parent::-webkit-scrollbar-thumb {
+.MathJax_Display::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 2px;
 }
 
-.math-parent::-webkit-scrollbar-thumb:hover {
+.MathJax_Display::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
