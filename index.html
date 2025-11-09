@@ -3,19 +3,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Time Scaling of Diffusions with Flowmaps</title>
-    <meta name="description" content="Using flowmaps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
+    <title>Test Time Scaling of Diffusions with Flow Maps</title>
+    <meta name="description" content="Using flow maps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta name="robots" content="all">
     <meta content="en_EN" property="og:locale">
     <meta content="website" property="og:type">
     <meta content="#" property="og:url">
-    <meta property="og:title" content="Test Time Scaling of Diffusions with Flowmaps">
-    <meta property="og:description" content="Using flowmaps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
+    <meta property="og:title" content="Test Time Scaling of Diffusions with Flow Maps">
+    <meta property="og:description" content="Using flow maps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@amsabour">
-    <meta name="twitter:description" content="Test Time Scaling of Diffusions with Flowmaps">
+    <meta name="twitter:description" content="Test Time Scaling of Diffusions with Flow Maps">
     <meta name="twitter:image:src" content="https://amsabour.github.io/FMTT/assets/figures/twitter_card.jpg">
     
     <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
@@ -85,7 +85,7 @@
         <div class="blog-title">
             <div class="blog-intro">
                 <div>
-                    <h1 class="title">Test Time Scaling of Diffusions with Flowmaps</h1>
+                    <h1 class="title">Test Time Scaling of Diffusions with Flow Maps</h1>
                     <p class="author">
                         <a href="#" target="_blank">Amirmojtaba Sabour</a><sup>*,1,2,10</sup>,
                         <a href="http://malbergo.me/" target="_blank">Michael S. Albergo</a><sup>*,3,4</sup>,
@@ -126,10 +126,10 @@
                     </div> -->
 
                     <!-- Using FontAwesome Free -->
-                    <div class="info">
+                    <div class="info" style="padding-top: 10px;">
                         <div>
-                            <a href="https://arxiv.org" target="_blank" class="button icon" style="background-color: rgba(255, 255, 255, 0.2)"><i class="fa-solid fa-book-open"></i> &nbsp; Paper</a> &nbsp;
-                            <!-- <a href="https://github.com" class="button icon" style="background-color: rgba(255, 255, 255, 0.2)"><i class="fa-solid fa-code"></i> &nbsp; Code (soon)</a>   -->
+                            <a href="#" target="_blank" class="button icon" style="background-color: rgba(255, 255, 255, 1.0); border: 1px solid #000000;"><i class="fa-solid fa-book-open"></i> &nbsp; Paper</a> &nbsp;
+                            <a href="#" target="_blank" class="button icon" style="background-color: rgba(255, 255, 255, 1.0); border: 1px solid #000000;"><i class="fa-solid fa-code"></i> &nbsp; Code (soon)</a>  
                             <!-- <a href="https://www.microsoft.com/en-gb/microsoft-365/powerpoint" class="button icon" style="background-color: rgba(255, 255, 255, 0.2);">Slides <i class="fa-regular fa-file-powerpoint"></i></a> &nbsp;&nbsp;  -->
                             <!-- <a href="https://huggingface.co/spaces/" class="button icon" style="background-color: rgba(255, 255, 255, 0.2)">Demo <i class="fa-solid fa-laptop-code"></i></a>  -->
                         </div>
@@ -207,7 +207,7 @@
         </p>
         <p class="text">
             Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. Specifically, FMTT proposes using the flow map, which is a function $X_{t, 1}(x_t)$
-            that can traverse the probability flow ODE to accurately estimate the final state $x_1$ of each intermediate state $x_t$. By using the flowmap as a 
+            that can traverse the probability flow ODE to accurately estimate the final state $x_1$ of each intermediate state $x_t$. By using the flow map as a 
             look-ahead and computing the reward gradient at the estimated final state (e.g. $r_t(x_t) = t\,r(X_{t, 1}(x_t))$), FMTT enables consistent reward guidance 
             throughout the trajectory. We additionally unify sampling and search under one framework, allowing both exact sampling via importance weighting and 
             reward-tilted search that reliably finds high-reward samples. Please refer to the paper for more details.
@@ -217,7 +217,7 @@
     <div class="container blog large gray-linear">
         <img src="assets/figures/flow-map-tuning-transparent-highres.png" style="width: 100%;">
         <p class="caption">
-            Using the flowmap $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
+            Using the flow map $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
             This allows better ascent on the reward, as well as remarkably simplifying the importance weights for exact sampling.
         </p>
     </div>
@@ -304,7 +304,7 @@
                             <td>0.57</td>
                         </tr>
                         <tr>
-                            <td>FMTT (4 step flowmap lookahead)</td>
+                            <td>FMTT (4 step flow map lookahead)</td>
                             <td><span style="font-weight: 600;">0.79</span></td>
                             <td><span style="font-weight: 600;">1.0</span></td>
                             <td><span style="font-weight: 600;">0.97</span></td>
@@ -332,14 +332,17 @@
     </div>
 
     <div class="container blog extra-large gray-linear">
-        <div class="slideshow" data-width="85vw" data-padding="5vw">
+        <div class="slideshow" data-width="90vw" data-padding="3vw" data-widthmobile="98vw" data-paddingmobile="1vw">
             <div class="navigation">
                 <a class="button icon prev_btn"><i class="fa-solid fa-arrow-left"></i></a>
                 <a class="button icon next_btn"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="slider">
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-1-v2.png" style="width: 100%; height: auto;">
+                    <img src="assets/figures/geometrics/geometric-1.png"
+                        onmouseover="this.src='assets/figures/geometrics/geometric-1-v2.png';"
+                        onmouseout="this.src='assets/figures/geometrics/geometric-1.png';"
+                        style="width: 100%; height: auto;">
                 </div>
                 <div class="slider-item">
                     <img src="assets/figures/geometrics/geometric-2.png" style="width: 100%; height: auto;">
@@ -360,47 +363,6 @@
         </div>
     </div>
 
-    <!-- <div class="container blog large gray">
-        <div class="slide-menu">
-            <ul class="dots" id="slide-menu">
-                <li class="dot active"></li>
-                <li class="dot"></li>
-                <li class="dot"></li>
-                <li class="dot"></li>
-                <li class="dot"></li>
-                <li class="dot"></li>
-            </ul>
-        </div>
-       
-        <div class="slide-content" style="display: block;">
-            <img src="assets/figures/geometrics/geometric-1.png" style="width: 100%;">
-        </div>
-
-        <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometrics/geometric-2.png" style="width: 100%;">
-        </div>
-
-        <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometrics/geometric-3.png" style="width: 100%;">
-        </div>
-
-        <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometrics/geometric-4.png" style="width: 100%;">
-        </div>
-
-        <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometrics/geometric-5.png" style="width: 100%;">
-        </div>
-
-        <div class="slide-content" style="display: none;">
-            <img src="assets/figures/geometrics/geometric-6.png" style="width: 100%;">
-        </div>
-
-        <p class="caption">
-            Nothing.
-        </p> 
-    </div> -->
-
     <div class="container blog large">
         <h2>VLM-Based Rewards</h2>
         <p class="text">
@@ -416,7 +378,7 @@
     </div>
 
     <div class="container blog extra-large gray-linear">
-        <div class="slideshow" data-width="60vw" data-padding="15vw">
+        <div class="slideshow" data-width="65vw" data-padding="15vw" data-widthmobile="98vw" data-paddingmobile="1vw">
             <div class="navigation">
                 <a class="button icon prev_btn"><i class="fa-solid fa-arrow-left"></i></a>
                 <a class="button icon next_btn"><i class="fa-solid fa-arrow-right"></i></a>
@@ -472,9 +434,9 @@
 
     <div class="container blog large gray-linear">
         <div class="columns-3">
-            <p class="text" style="text-align: center; font-weight: 600; font-size: x-large;">FLUX.1 [dev]</p>
-            <p class="text" style="text-align: center; font-weight: 600; font-size: x-large;">Reference Image</p>
-            <p class="text" style="text-align: center; font-weight: 600; font-size: x-large;">FLUX + FMTT</p>
+            <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+            <h3 style="text-align: center;">Reference Image</h3>
+            <h3 style="text-align: center;">FLUX + FMTT</h3>
         </div>
         <div>
             <div class="columns-3 wrapper">

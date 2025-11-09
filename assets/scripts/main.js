@@ -167,8 +167,11 @@ document.querySelectorAll('.slideshow').forEach((host) => {
   let interval;
   let offset = 20;
 
-  let base = toPx(host.dataset.width, slider);
-  let padding = toPx(host.dataset.padding, slider);
+  let slideshowWidth = host.dataset.width;
+  let slideshowPadding = host.dataset.padding;
+
+  let base = toPx(slideshowWidth, slider);
+  let padding = toPx(slideshowPadding, slider);
   if (!Number.isFinite(base)) base = 400;
   if (!Number.isFinite(padding)) padding = 20;
   let step = base + 2 * padding;
@@ -180,6 +183,9 @@ document.querySelectorAll('.slideshow').forEach((host) => {
       const natH = el.naturalHeight || el.videoHeight || el.clientHeight;
       if (natW > 0) {
         const scaledH = (natH / natW) * base; // base is the computed slide width
+        if (scaledH > 900){
+          console.log(natW, natH, base, scaledH);
+        }
         if (scaledH > max) max = scaledH;
       }
     });
@@ -221,9 +227,20 @@ document.querySelectorAll('.slideshow').forEach((host) => {
   };
 
   const recalc = () => {
-    const parsed = toPx(host.dataset.width, slider);
-    const parsedPadding = toPx(host.dataset.padding, slider);
-    base = Number.isFinite(parsed) ? parsed : 400;
+    if (window.matchMedia("(max-width: 800px)").matches) {
+      // Check for mobile-specific attrs, fallback to default if not found
+      slideshowWidth   = host.dataset.widthmobile   ?? host.dataset.width;
+      slideshowPadding = host.dataset.paddingmobile ?? host.dataset.padding;
+    } else {
+      slideshowWidth = host.dataset.width;
+      slideshowPadding = host.dataset.padding;
+    }
+
+    console.log(slideshowWidth, slideshowPadding);
+
+    const parsedWidth = toPx(slideshowWidth, slider);
+    const parsedPadding = toPx(slideshowPadding, slider);
+    base = Number.isFinite(parsedWidth) ? parsedWidth : 400;
     padding = Number.isFinite(parsedPadding) ? parsedPadding : 20;
     step = base + 2 * padding;
 
@@ -248,4 +265,6 @@ document.querySelectorAll('.slideshow').forEach((host) => {
 
   setPositions();
   startAuto();
+  next(false);
+  prev();
 });
