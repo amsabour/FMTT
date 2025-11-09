@@ -1588,3 +1588,11 @@ select {
   z-index: 1000;
 }
 
+.text.note {
+  color: #5f6368;
+  font-size: 0.75em;
+}
+
+.text.prompt {
+  font-size: 1em;
+}

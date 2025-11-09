@@ -199,7 +199,7 @@
             $$
         </p>
         <p class="text">
-            In practice, however, most rewards (such as “text alignment” or “visual fidelity”) are only defined on clean samples $x_1$ at the end of generation. 
+            In practice, however, most rewards (such as "text alignment" or "visual fidelity") are only defined on clean samples $x_1$ at the end of generation. 
             Prior works address this by either 
             (1) ignoring the issue and evaluating the reward directly on the noisy state (e.g., $r_t(x) = t\,r(x)$), or 
             (2) using the denoiser $D(x_t) = \mathbb{E}[x_1 | x_t]$ to approximate the final image (e.g., $r_t(x) = t\,r(D(x_t))$). 
@@ -339,25 +339,123 @@
             </div>
             <div class="slider">
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-1.png"
-                        onmouseover="this.src='assets/figures/geometrics/geometric-1-v2.png';"
-                        onmouseout="this.src='assets/figures/geometrics/geometric-1.png';"
-                        style="width: 100%; height: auto;">
+                    <div class="columns-3">
+                        <h3 style="text-align: center;">Masked Generation</h3>
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-3 wrapper">
+                        <img src="assets/figures/geometrics/geometric-1-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-1-p2.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-1-p3.png" style="margin-bottom: 0px;" 
+                                onmouseover="this.src='assets/figures/geometrics/geometric-1-p3-v2.png';" 
+                                onmouseout="this.src='assets/figures/geometrics/geometric-1-p3.png';">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        Prompt: "A tiny desert landscape with sand dunes, a crescent moon above, and a lone camel silhouette, all inside a transparent glass orb 
+                        <b>located in the top right of the image on a black background</b>"
+                    </em></p>
+                    <p class="text note" style="text-align: center; padding-bottom: 0px;">
+                        <i class="fa-solid fa-circle-info"></i>                        
+                        Note how the glass orb is not located within the masked region (top right) in the original FLUX.1 [dev] generations. 
+                    </p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-2.png" style="width: 100%; height: auto;">
+                    <div class="columns-3">
+                        <h3 style="text-align: center;">Masked Generation</h3>
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-3 wrapper">
+                        <img src="assets/figures/geometrics/geometric-2-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-2-p2.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-2-p3.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        Prompt: "A miniature forest with tall pine trees, a glowing campfire, and fireflies drifting in the night sky, 
+                        <b>all inside a keyhole on a black background</b>"
+                    </em></p>
+                    <p class="text note" style="text-align: center; padding-bottom: 0px;">
+                        <i class="fa-solid fa-circle-info"></i>                        
+                        Note how the scene is not located within the masked region (keyhole) in the original FLUX.1 [dev] generations. 
+                    </p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-3.png" style="width: 100%; height: auto;">
+                    <div class="columns-3">
+                        <h3 style="text-align: center;">Masked Generation</h3>
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-3 wrapper">
+                        <img src="assets/figures/geometrics/geometric-3-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-3-p2.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-3-p3.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        Prompt: "A tiny ocean wave curling with a sailboat riding the crest, under a glowing sunset sky, 
+                        <b>all inside an infinity loop symbol on a black background</b>"
+                    </em></p>
+                    <p class="text note" style="text-align: center; padding-bottom: 0px;">
+                        <i class="fa-solid fa-circle-info"></i>                        
+                        Note how the scene is not located within the masked region (infinity symbol) in the original FLUX.1 [dev] generations. 
+                    </p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-4.png" style="width: 100%; height: auto;">
+                    <div class="columns-3">
+                        <h3 style="text-align: center;">Symmetric Generation</h3>
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-3 wrapper">
+                        <img src="assets/figures/geometrics/geometric-4-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-4-p2.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-4-p3.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        Prompt: "<b>A symmetrical image</b> of a miniature cosmic scene with planets orbiting, sealed inside a glass teardrop pendant on a white background"
+                    </em></p>
+                    <p class="text note" style="text-align: center; padding-bottom: 0px;">
+                        <i class="fa-solid fa-circle-info"></i>                        
+                        Note how the image is not quite horizontally symmetric in the original FLUX.1 [dev] generations. 
+                    </p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-5.png" style="width: 100%; height: auto;">
+                    <div class="columns-3">
+                        <h3 style="text-align: center;">Anti-Symmetric Generation</h3>
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-3 wrapper">
+                        <img src="assets/figures/geometrics/geometric-5-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-5-p2.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-5-p3.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        Prompt: "<b>An anti-symmetric</b> black and white cat split down the middle, black on the left and white on the right"
+                    </em></p>
+                    <p class="text note" style="text-align: center; padding-bottom: 0px;">
+                        <i class="fa-solid fa-circle-info"></i>                        
+                        Note how the image is not horizontally anti-symmetric in the original FLUX.1 [dev] generations (both eyes being the same color, pure white background). 
+                    </p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/geometrics/geometric-6.png" style="width: 100%; height: auto;">
+                    <div class="columns-3">
+                        <h3 style="text-align: center;">Rotation Invariant Generation</h3>
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-3 wrapper">
+                        <img src="assets/figures/geometrics/geometric-6-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-6-p2.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/geometrics/geometric-6-p3.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        Prompt: "A clean and minimal logo of two koi fish <b>circling each other</b>"
+                    </em></p>
+                    <p class="text note" style="text-align: center; padding-bottom: 0px;">
+                        <i class="fa-solid fa-circle-info"></i>                        
+                        Note how the image is not invariant with respect to a 180° rotation in the original FLUX.1 [dev] generations (koi fish having different colors, or being symmetrically mirrored instead of rotated). 
+                    </p>
                 </div>
             </div>
         </div>
@@ -378,38 +476,173 @@
     </div>
 
     <div class="container blog extra-large gray-linear">
-        <div class="slideshow" data-width="65vw" data-padding="15vw" data-widthmobile="98vw" data-paddingmobile="1vw">
+        <div class="slideshow" data-width="90vw" data-padding="3vw" data-widthmobile="98vw" data-paddingmobile="1vw">
             <div class="navigation">
                 <a class="button icon prev_btn"><i class="fa-solid fa-arrow-left"></i></a>
                 <a class="button icon next_btn"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="slider">
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-1.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-1-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-1-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "A person holding a mirror that reflects <b>three people</b> in it"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is &lt;PROMPT&gt; a correct caption for the image?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-2.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-2-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-2-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "A man reading a book that shows a picture of the same man reading the same book"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is &lt;PROMPT&gt; a correct caption for the image?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-3.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-3-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-3-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "an upside down castle"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is &lt;PROMPT&gt; a correct caption for the image?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-4.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-4-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-4-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "A bicycle with <b>square wheels</b>"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is &lt;PROMPT&gt; a correct caption for the image?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-5.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-5-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-5-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "a man in the rain holding a <b>closed umbrella</b>"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is &lt;PROMPT&gt; a correct caption for the image?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-6.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-6-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-6-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "a man wearing a <b>fully zipped up</b> leather jacket"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is &lt;PROMPT&gt; a correct caption for the image?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-7.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-7-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-7-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "A giant hand <b>made of clouds</b> holding a tiny thunderstorm inside its palm"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Questions: "Is the hand made of clouds?" + "Is there a tiny thunderstorm inside the palm of the hand?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-8.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-8-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-8-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "The phrase 'Flow Map Trajectory Tilting' spelled out using floating feathers suspended in mid-air"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is &lt;PROMPT&gt; in the image?"
+                    </em></p>
                 </div>
                 <div class="slider-item">
-                    <img src="assets/figures/vlms/VLM-9.png" style="width: 100%; height: auto;">
+                    <div class="columns-2">
+                        <h3 style="text-align: center;">FLUX.1 [dev]</h3>
+                        <h3 style="text-align: center;">FLUX + FMTT (Ours)</h3>
+                    </div>
+                    <div class="columns-2 wrapper">
+                        <img src="assets/figures/vlms/VLM-9-p1.png" style="margin-bottom: 0px;">
+                        <img src="assets/figures/vlms/VLM-9-p2.png" style="margin-bottom: 0px;">
+                    </div>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-regular fa-image"></i>
+                        Prompt: "A coffee cup with a handle on the inside"
+                    </em></p>
+                    <p class="text prompt" style="text-align: center; padding-bottom: 0px;"><em>
+                        <i class="fa-solid fa-robot"></i>
+                        VLM Question: "Is the handle of the cup on the inside?"
+                    </em></p>
                 </div>
             </div>
         </div>
@@ -441,77 +674,57 @@
         <div>
             <div class="columns-3 wrapper">
                 <figure class="image-container">
-                    <img width="95%" src="assets/figures/vlms/VLM-11-1.png" style="margin-bottom: 0px;">
+                    <img src="assets/figures/vlms/VLM-11-1.png" style="margin-bottom: 0px;">
                     <div class="magnifier"></div>
                 </figure>
       
                 <figure class="image-container">
-                    <img width="95%" src="assets/figures/vlms/VLM-11-2.png" style="margin-bottom: 0px;">
+                    <img src="assets/figures/vlms/VLM-11-2.png" style="margin-bottom: 0px;">
                     <!-- <div class="magnifier" style="opacity: 0;"></div> -->
                 </figure>
     
                 <figure class="image-container">
-                    <img width="95%" src="assets/figures/vlms/VLM-11-3.png" style="margin-bottom: 0px;">
+                    <img src="assets/figures/vlms/VLM-11-3.png" style="margin-bottom: 0px;">
                     <div class="magnifier"></div>
                 </figure>
             </div>
-            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>Prompt: "a Van Gogh style painting of a dog"</em></p>
-            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>VLM Question: "Do these two images have the same art style?"</em></p>
+            <p class="text prompt" style="text-align: center; padding-top: 0px; padding-bottom: 0px;">
+                <i class="fa-regular fa-image"></i>
+                <em>Prompt: "a Van Gogh style painting of a dog"</em>
+            </p>
+            <p class="text prompt" style="text-align: center; padding-top: 0px; padding-bottom: 0px;">
+                <i class="fa-solid fa-robot"></i>
+                <em>VLM Question: "Do these two images have the same art style?"</em>
+            </p>
         </div>
         <p class="text"></p>
         <div>
             <div class="columns-3 wrapper">
                 <figure class="image-container">
-                    <img width="95%" src="assets/figures/vlms/VLM-12-1.png" style="margin-bottom: 0px;">
+                    <img src="assets/figures/vlms/VLM-12-1.png" style="margin-bottom: 0px;">
                     <div class="magnifier"></div>
                 </figure>
       
                 <figure class="image-container">
-                    <img width="95%" src="assets/figures/vlms/VLM-12-2.png" style="margin-bottom: 0px;">
+                    <img src="assets/figures/vlms/VLM-12-2.png" style="margin-bottom: 0px;">
                     <!-- <div class="magnifier" style="opacity: 0;"></div> -->
                 </figure>
     
                 <figure class="image-container">
-                    <img width="95%" src="assets/figures/vlms/VLM-12-3.png" style="margin-bottom: 0px;">
+                    <img src="assets/figures/vlms/VLM-12-3.png" style="margin-bottom: 0px;">
                     <div class="magnifier"></div>
                 </figure>
             </div>
-            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>Prompt: "a cute grumpy cartoon mushroom character with a large brown mushroom cap walking his dog"</em></p>
-            <p class="text" style="text-align: center; padding-top: 0px; padding-bottom: 0px;"><em>VLM Question: "Are these two images of the exact same character?"</em></p>
+            <p class="text prompt" style="text-align: center; padding-top: 0px; padding-bottom: 0px;">
+                <i class="fa-regular fa-image"></i>
+                <em>Prompt: "a cute grumpy cartoon mushroom character with a large brown mushroom cap walking his dog"</em>
+            </p>
+            <p class="text prompt" style="text-align: center; padding-top: 0px; padding-bottom: 0px;">
+                <i class="fa-solid fa-robot"></i>
+                <em>VLM Question: "Are these two images of the exact same character?"</em>
+            </p>
         </div>
     </div>
-
-    <!-- <div class="container blog large">
-        <h1>Additional Analysis</h1>
-        <h2>Observation 1</h2>
-        <p class="text">
-            Lorem ipsum odor amet, consectetuer adipiscing elit. Himenaeos sociosqu facilisi ante; cubilia sociosqu magna libero. Dignissim vehicula felis taciti sollicitudin quam ligula a, vivamus porta. Tellus facilisi pharetra non posuere a sapien. Sagittis felis lectus ac interdum pretium sit himenaeos.
-        </p>
-        <ol>
-            <li>
-                <p class="text">Conubia aliquet semper inceptos ultricies vel metus fusce litora. </p>
-            </li>
-            <li>
-                <p class="text">Ultricies dis vehicula non lobortis hac sagittis urna dignissim ex. 
-                </p>
-            </li>
-        </ol>
-
-        <h2>Observation 2</h2>
-        <p class="text">
-            Lorem ipsum odor amet, consectetuer adipiscing elit. Himenaeos sociosqu facilisi ante; cubilia sociosqu magna libero. Dignissim vehicula felis taciti sollicitudin quam ligula a, vivamus porta. Tellus facilisi pharetra non posuere a sapien. Sagittis felis lectus ac interdum pretium sit himenaeos.
-        </p>
-
-        <ul >
-            <li>
-                <p class="text">Conubia aliquet semper inceptos ultricies vel metus fusce litora. </p>
-            </li>
-            <li>
-                <p class="text">Ultricies dis vehicula non lobortis hac sagittis urna dignissim ex. 
-                </p>
-            </li>
-        </ul>
-    </div> -->
 
     <div class="container blog large">
         <h1>Citation</h1>
@@ -615,69 +828,5 @@
           });
         } 
       </script>
-    
-
-    <!-- <style>
-        #first-content { transition: background 300ms ease, color 300ms ease; }
-        #gradientControls {
-          position: fixed; right: 12px; bottom: 12px; z-index: 9999;
-          display: flex; gap: 8px; align-items: center;
-          background: rgba(255,255,255,0.85);
-          padding: 6px 8px; border-radius: 8px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-          backdrop-filter: saturate(140%) blur(8px);
-        }
-        #gradientControls button {
-          appearance: none; border: 1px solid rgba(0,0,0,0.15);
-          background: #fff; color: #111; padding: 6px 10px; border-radius: 6px;
-          font: 13px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; cursor: pointer;
-        }
-        #gradientControls span {
-          font: 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #111;
-          white-space: nowrap;
-        }
-      </style>
-      <div id="gradientControls" role="group" aria-label="Gradient controls">
-        <button id="prevGradient" type="button" aria-label="Previous gradient">← Prev</button>
-        <span id="gradientName">1/9 – Soft Sky → Peach</span>
-        <button id="nextGradient" type="button" aria-label="Next gradient">Next →</button>
-      </div>
-      <script>
-        (function () {
-          const gradients = [
-            // { name: 'Soft Sky → Peach', background: 'linear-gradient(135deg, #E6F4FF 0%, #FFF4E6 100%)' },
-            // { name: 'Mint → Lavender', background: 'linear-gradient(135deg, #EAF5EE 0%, #F1E8FF 100%)' },
-            // { name: 'Blush → Periwinkle', background: 'linear-gradient(135deg, #FFE4E6 0%, #E0E7FF 100%)' },
-            { name: 'Sage → Sand', background: 'linear-gradient(135deg, #E7F3EF 0%, #F8F1E7 100%)' },
-            { name: 'Sage → Sand', background: 'linear-gradient(180deg, #E7F8EF 0%, #F8F1E7 100%)' },
-            { name: 'Fresh Green → Soft Blue', background: 'linear-gradient(135deg, #DCFCE7 0%, #DBEAFE 100%)' },
-            // { name: 'Clean Neutrals', background: 'linear-gradient(135deg, #F8FAFC 0%, #E5E7EB 100%)' },
-            // { name: '3-Stop Pastel', background: 'linear-gradient(135deg, #E6F4FF 0%, #F3E8FF 50%, #FFF4E6 100%)' },
-            // { name: 'Radial Glow', background: 'radial-gradient(1200px circle at 20% 15%, #E6F4FF 0%, #F8FAFC 50%, #FFFFFF 100%)' },
-          ];
-  
-          const target = document.getElementById('first-content');
-          if (!target) return;
-  
-          const nameEl = document.getElementById('gradientName');
-          const prevBtn = document.getElementById('prevGradient');
-          const nextBtn = document.getElementById('nextGradient');
-  
-          let i = 0;
-  
-          function apply(idx) {
-            const g = gradients[idx];
-            target.style.background = g.background;
-            target.style.color = g.color || '';
-            if (nameEl) nameEl.textContent = (idx + 1) + '/' + gradients.length + ' – ' + g.name;
-          }
-  
-          apply(i);
-  
-          prevBtn.addEventListener('click', () => { i = (i - 1 + gradients.length) % gradients.length; apply(i); });
-          nextBtn.addEventListener('click', () => { i = (i + 1) % gradients.length; apply(i); });
-        })();
-      </script> -->
-    
 </body>
 </html>

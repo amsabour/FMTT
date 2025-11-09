@@ -123,6 +123,6 @@
     display: grid;
     -moz-column-gap: 2vw;
          column-gap: 2vw;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }/*# sourceMappingURL=clarity.css.map */

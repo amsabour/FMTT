@@ -178,16 +178,11 @@ document.querySelectorAll('.slideshow').forEach((host) => {
 
   function updateSliderHeight() {
     let max = 0;
-    slider.querySelectorAll('.slider-item img, .slider-item video').forEach((el) => {
-      const natW = el.naturalWidth  || el.videoWidth  || el.clientWidth;
-      const natH = el.naturalHeight || el.videoHeight || el.clientHeight;
-      if (natW > 0) {
-        const scaledH = (natH / natW) * base; // base is the computed slide width
-        if (scaledH > 900){
-          console.log(natW, natH, base, scaledH);
-        }
-        if (scaledH > max) max = scaledH;
-      }
+    // Measure actual rendered height of each slide at the current width
+    slider.querySelectorAll('.slider-item').forEach((item) => {
+      item.style.width = `${base}px`; // ensure width is in sync for measurement
+      const h = item.scrollHeight || item.offsetHeight || 0;
+      if (h > max) max = h;
     });
     if (max > 0) slider.style.height = `${Math.ceil(max)}px`;
   }
@@ -236,8 +231,6 @@ document.querySelectorAll('.slideshow').forEach((host) => {
       slideshowPadding = host.dataset.padding;
     }
 
-    console.log(slideshowWidth, slideshowPadding);
-
     const parsedWidth = toPx(slideshowWidth, slider);
     const parsedPadding = toPx(slideshowPadding, slider);
     base = Number.isFinite(parsedWidth) ? parsedWidth : 400;
@@ -249,11 +242,22 @@ document.querySelectorAll('.slideshow').forEach((host) => {
     offset = (padding + remainderWidth / 2);
     setTransitionSpeed('0.01s'); // force immediate transition
     setPositions();
+    updateSliderHeight();
   };
   
   // run once and whenever the viewport changes
   recalc();
   window.addEventListener('resize', recalc);
+
+  // Recompute height after media load/metadata is available
+  host.querySelectorAll('img').forEach((img) => {
+    if (img.complete) return;
+    img.addEventListener('load', updateSliderHeight, { once: true });
+  });
+  host.querySelectorAll('video').forEach((vid) => {
+    if (vid.readyState >= 1) return;
+    vid.addEventListener('loadedmetadata', updateSliderHeight, { once: true });
+  });
 
   btnRight.addEventListener('click', () => next(false));
   btnLeft.addEventListener('click', prev);
