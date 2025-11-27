@@ -3,19 +3,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Time Scaling of Diffusions with Flow Maps</title>
-    <meta name="description" content="Using flow maps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
+    <title>Test-time Scaling of Diffusions with Flow Maps</title>
+    <meta name="description" content="Using flow maps allows for more principled, efficient, and scalable test-time adaption of diffusion models.">
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta name="robots" content="all">
     <meta content="en_EN" property="og:locale">
     <meta content="website" property="og:type">
     <meta content="#" property="og:url">
-    <meta property="og:title" content="Test Time Scaling of Diffusions with Flow Maps">
-    <meta property="og:description" content="Using flow maps allows for more principled, efficient, and scalable test time adaption of diffusion models.">
+    <meta property="og:title" content="Test-time Scaling of Diffusions with Flow Maps">
+    <meta property="og:description" content="Using flow maps allows for more principled, efficient, and scalable test-time adaption of diffusion models.">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@amsabour">
-    <meta name="twitter:description" content="Test Time Scaling of Diffusions with Flow Maps">
+    <meta name="twitter:description" content="Test-time Scaling of Diffusions with Flow Maps">
     <meta name="twitter:image:src" content="https://amsabour.github.io/FMTT/assets/figures/twitter_card.jpg">
     
     <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
@@ -85,7 +85,7 @@
         <div class="blog-title">
             <div class="blog-intro">
                 <div>
-                    <h1 class="title">Test Time Scaling of Diffusions with Flow Maps</h1>
+                    <h1 class="title">Test-time Scaling of Diffusions with Flow Maps</h1>
                     <p class="author">
                         <a href="#" target="_blank">Amirmojtaba Sabour</a><sup>*,1,2,3</sup>,
                         <a href="http://malbergo.me/" target="_blank">Michael S. Albergo</a><sup>*,4,5,6</sup>,
@@ -109,10 +109,11 @@
                         <sup>10</sup> Capital Fund Management (CFM) 
                     </p>
                     <p class="abstract">
-                        Test time scaling of diffusions aims to generate samples that achieve high scores under a user-defined reward.
-                        Most existing methods do this by injecting the reward's gradient directly into the diffusion process, but this is ill-posed since the reward is only well-defined on the clean data distribution at the end of generation. 
+                        Test-time scaling of diffusions aims to generate samples that achieve high scores under a user-defined reward.
+                        Most existing methods do this by injecting the reward's gradient directly into the diffusion process, but this is ill-posed, since the reward is only well-defined on the clean data distribution at the end of generation. 
                         Prior approaches attempt to fix this by using a 1-step denoiser to estimate the final sample, but this is extremely inaccurate early in sampling, leading to unhelpful gradients.
-                        We introduce Flow Map Trajectory Tilting (FMTT), a simple alternative that uses the flow map as a look-ahead, allowing reward signals to be applied consistently throughout the generation process. 
+                        We introduce Flow Map Trajectory Tilting (FMTT), a simple alternative that instead uses the diffusion's flow map, which facilitates fast single- or few-step generation, as a look-ahead that is both efficient and accurate. 
+                        This allows reward signals to be applied consistently throughout the entire generation process.
                         FMTT can be used for both exact sampling via importance weighting and principled search that focuses on high-reward samples.
                     </p>
                     <!-- Using FontAwesome Pro -->
@@ -188,13 +189,13 @@
             Efforts to align diffusion models for high-reward generation can be broadly divided into <em>training-based</em> and <em>training-free</em> approaches. 
             Training-based methods, often referred to as diffusion alignment techniques, optimize the model parameters so that the retrained model naturally produces higher-reward samples. 
             While effective, these approaches are computationally expensive and must be repeated for each new reward function. 
-            Training-free methods, also known as test time scaling methods, on the other hand, modify the <em>sampling process</em> to bias generation toward higher-reward regions, 
+            Training-free methods, also known as test-time scaling methods, on the other hand, modify the <em>sampling process</em> to bias generation toward high-reward regions, 
             making them far more flexible when working with multiple or rapidly changing rewards.
             In this work, we focus on training-free methods.
         </p>
         <p class="text"> 
-            A common approach is to apply <em style="font-weight: 600;">reward-guidance</em>, which injects the gradient of the reward directly into the diffusion process 
-            to nudge samples toward higher-reward regions: 
+            A common approach is to apply <em style="font-weight: 600;">reward guidance</em>, which injects the gradient of the reward directly into the stochastic generative process 
+            to nudge samples toward high-reward regions: 
             $$
             dx_t = [b_t(x_t) + \epsilon_t s_t(x_t) + \color{red}{\epsilon_t \nabla r_t(x_t)}] dt + \sqrt{2\epsilon_t} d W_t, \quad x_0 \sim \mathcal{N}(0, I).
             $$
@@ -220,16 +221,21 @@
 
     <div class="container blog large">
         <p class="text">
-            Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. Specifically, FMTT proposes using the flow map, which is a function $X_{t, 1}(x_t)$
-            that can traverse the probability flow ODE to accurately estimate the final state $x_1$ of each intermediate state $x_t$. By using the flow map as a 
-            look-ahead and computing the reward gradient at the estimated final state (e.g. $r_t(x_t) = t\,r(X_{t, 1}(x_t))$), FMTT enables consistent reward guidance 
-            throughout the trajectory. We additionally unify sampling and search under one framework, allowing both exact sampling via importance weighting and 
+            Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. 
+            The main idea is to use a flow map $X_{t, s}(x_t)$, a function that integrates the probability flow ODE to map any noisy state $x_t$ to a less noisy state $x_s$. 
+            In other words, the flow map allows us to jump along the diffusion trajectory without explicitly simulating every intermediate step.
+            This allows single-step, few-step, and full many-step sampling within the same framework. And, when we evaluate the flow map at $t=s$, 
+            its derivative recovers the instantaneous velocity $b_t(x_t)$ learned by standard flow matching.
+            By using the flow map as a look-ahead that is both fast and accurate, and computing the reward gradient at the estimated final state (e.g. $r_t(x_t) = t\,r(X_{t, 1}(x_t))$), 
+            FMTT enables consistent reward guidance throughout the trajectory. 
+            Essentially, FMTT steers the stochastic generative process with an efficient deterministic look-ahead towards high-reward regions (see <a href="#figure2">Figure 2</a> below).
+            We additionally unify sampling and search under one framework, allowing both exact sampling via importance weighting and 
             reward-tilted search that reliably finds high-reward samples. Please refer to the paper for more details.
         </p>
     </div>
 
     <div class="container blog large gray-linear">
-        <img src="assets/figures/flow-map-tuning-transparent-highres.png" style="width: 100%;">
+        <img src="assets/figures/flow-map-tuning-transparent-highres.png" style="width: 100%;" id="figure2">
         <p class="caption">
             <b>Figure 2:</b>
             Using the flow map $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
@@ -242,8 +248,8 @@
         <p class="text">
             We evaluate our FMTT algorithm on text-to-image generation using the flow map 
             from <a target="_blank" href="https://arxiv.org/abs/2506.14603">Align Your Flow</a>, which distills 
-            the <a target="_blank" href="https://huggingface.co/black-forest-labs/FLUX.1-dev">FLUX.1-dev</a> model into a 4-step flow map.  
-            We consider three category of rewards: (1) Human Preference Rewards, (2) Geometric Rewards, and (3) VLM-Based Rewards.
+            the <a target="_blank" href="https://huggingface.co/black-forest-labs/FLUX.1-dev">FLUX.1 [dev]</a> model into an efficient flow map.  
+            We consider three categories of rewards: (1) human preference rewards, (2) geometric rewards, and (3) VLM-based rewards.
         </p>
 
         <h2>Human Preference Rewards</h2>
@@ -256,7 +262,7 @@
             <a target="_blank" href="https://arxiv.org/abs/2103.00020">CLIP</a> as the reward function 
             and quantitatively evaluate the performance on the 
             <a target="_blank" href="https://arxiv.org/abs/2310.11513">GenEval</a> benchmark. 
-            This benchmark evaluates the performance of text-to-image models using approximately 550 
+            This commonly-used benchmark evaluates the performance of text-to-image models using approximately 550 
             object-centric prompts and measures the quality of the generated images using pre-trained object detectors.
         </p>
         <p class="text">
@@ -298,7 +304,17 @@
                             <td>0.57</td>
                         </tr>
                         <tr>
-                            <td>FMTT (4 step diffusion lookahead)</td>
+                            <td>FMTT (1-step denoiser look-ahead)</td>
+                            <td>0.75</td>
+                            <td>0.99</td>
+                            <td>0.90</td>
+                            <td>0.87</td>
+                            <td>0.87</td>
+                            <td>0.26</td>
+                            <td>0.59</td>
+                        </tr>
+                        <tr>
+                            <td>FMTT (4-step diffusion look-ahead)</td>
                             <td>0.75</td>
                             <td>0.99</td>
                             <td>0.93</td>
@@ -308,7 +324,7 @@
                             <td>0.57</td>
                         </tr>
                         <tr>
-                            <td>FMTT (4 step flow map lookahead)</td>
+                            <td>FMTT (4-step flow map look-ahead)</td>
                             <td><span style="font-weight: 600;">0.79</span></td>
                             <td><span style="font-weight: 600;">1.0</span></td>
                             <td><span style="font-weight: 600;">0.97</span></td>
@@ -326,12 +342,14 @@
     <div class="container blog large">
         <h2>Geometric Rewards</h2>
         <p class="text">
-            A second class of rewards we consider are geometric rewards, which encourage invariance under simple geometric transformations such as masking, symmetry, or rotation.
+            A second class of rewards we consider to highlight and illustrate the power of our method are challenging geometric rewards, 
+            which encourage invariance under simple geometric transformations such as masking, symmetry, or rotation.
             These objectives make generation more controllable, enabling fine-grained layout adjustments and structured scene composition.
         </p>
         <p class="text">
             By guiding the model toward outputs that achieve high geometric rewards, we can position, align, and balance elements in the image more precisely.
-            Below, we show some examples.
+            Below, we show some examples. Note how FLUX.1 [dev] cannot satisfy the desired constraints by simply prompting, 
+            and our reward-guidance is necessary to satisfy the geometry conditions.
         </p>
     </div>
 
@@ -474,13 +492,14 @@
             For example, asking "Is &lt;PROMPT&gt; a correct caption for the image?" encourages the generation of images that more accurately match the prompt.
         </p>
         <p class="text">
-            We perform a quantitative evaluation of the performance of our method on the short english prompts of the 
+            We perform a quantitative evaluation of the performance of our method on the short English prompts of the 
             <a target="_blank" href="https://codegoat24.github.io/UniGenBench/">UniGenBench++</a> benchmark using the 
             <a target="_blank" href="https://huggingface.co/Skywork/Skywork-VL-Reward-7B">Skywork-VL-7B</a> reward model. 
-            This benchmark contains 600 short english prompts, and scores the generated images using the 
+            This benchmark contains 600 short English prompts, and scores the generated images using the 
             <a target="_blank" href="https://huggingface.co/CodeGoat24/UniGenBench-EvalModel-qwen-72b-v1">UniGenBench evaluation model</a>, 
             a finetuned variant of Qwen2.5-VL-72B, across multiple dimensions such as world knowledge, visual reasoning, and more. 
             We summarize the results as a performance-vs-compute scaling curve in <a href="#figure3">Figure 3</a>. 
+            We find that FMTT offers a superior performance-compute trade-off compared to baseline methods.
             For more details, please refer to the <a target="_blank" href="#">paper</a>.
         </p>
     </div>
@@ -489,9 +508,9 @@
         <img src="assets/figures/scaling_unigenbench.jpg" style="width: 80%;" id="figure3">
         <p class="caption">
             <b>Figure 3:</b>
-            Scaling results on UniGenBench++ showing overall score versus compute. FMTT significantly out-performs prior methods, achieving higher scores at lower NFEs. 
-            Note that FMTT with a 1-step denoiser lookahead fails in beating the simple Best-of-N baseline, demonstrating the unhelpfulness of
-            reward gradients at blurry denoised states.
+            Scaling results on UniGenBench++ showing overall score versus compute. FMTT significantly outperforms both Best-of-$N$ and Multi-Best-of-$N$, achieving higher scores at a 
+            comparable number of function evaluations. 
+            Note that FMTT with a 1-step denoiser look-ahead fails in beating the Best-of-$N$ baseline, demonstrating the unhelpfulness of reward gradients at blurry denoised states.
         </p>
     </div>
 
