@@ -177,6 +177,7 @@
             dynamical equations (SDE/ODE) at inference time to generate samples from this tilted distribution. 
         </p>
     </div>
+    
     <div class="container blog main first">
         <video playsinline muted controls autoplay loop src="assets/videos/TrajectoryAnimation.mp4"></video>
     </div>
@@ -203,8 +204,21 @@
             Prior works address this by either 
             (1) ignoring the issue and evaluating the reward directly on the noisy state (e.g., $r_t(x) = t\,r(x)$), or 
             (2) using the denoiser $D(x_t) = \mathbb{E}[x_1 | x_t]$ to approximate the final image (e.g., $r_t(x) = t\,r(D(x_t))$). 
-            Both strategies evaluate the reward at states that are not yet fully generated, leading to unreliable gradients, especially in the early stages of sampling.
+            Both strategies evaluate the reward at states that are not yet fully generated, leading to unreliable gradients, especially in the early stages of sampling. 
+            For a visual example, see <a href="#figure1">Figure 1</a>.
         </p>
+    </div>
+
+    <div class="container blog large">
+        <img src="assets/figures/viz_lookaheads.jpg" style="width: 70%;" id="figure1">
+        <p class="caption">
+            <b>Figure 1:</b>
+            Comparison between different look-ahead methods. We visualize corrupted data for different levels of noise t and show the outputs of a 1-step denoiser, 
+            1-step flow map, and a 4-step flow map.
+        </p>
+    </div>
+
+    <div class="container blog large">
         <p class="text">
             Flow Map Trajectory Tilting (FMTT) offers a simple and principled alternative. Specifically, FMTT proposes using the flow map, which is a function $X_{t, 1}(x_t)$
             that can traverse the probability flow ODE to accurately estimate the final state $x_1$ of each intermediate state $x_t$. By using the flow map as a 
@@ -217,6 +231,7 @@
     <div class="container blog large gray-linear">
         <img src="assets/figures/flow-map-tuning-transparent-highres.png" style="width: 100%;">
         <p class="caption">
+            <b>Figure 2:</b>
             Using the flow map $X_{t, 1}(x_t)$ as a look-ahead inside the reward, reward information can be principly used through the tilted trajectories (green lines). 
             This allows better ascent on the reward, as well as remarkably simplifying the importance weights for exact sampling.
         </p>
@@ -465,14 +480,15 @@
             This benchmark contains 600 short english prompts, and scores the generated images using the 
             <a target="_blank" href="https://huggingface.co/CodeGoat24/UniGenBench-EvalModel-qwen-72b-v1">UniGenBench evaluation model</a>, 
             a finetuned variant of Qwen2.5-VL-72B, across multiple dimensions such as world knowledge, visual reasoning, and more. 
-            We summarize the results as a performance-vs-compute scaling curve below. 
+            We summarize the results as a performance-vs-compute scaling curve in <a href="#figure3">Figure 3</a>. 
             For more details, please refer to the <a target="_blank" href="#">paper</a>.
         </p>
     </div>
 
     <div class="container blog large">
-        <img src="assets/figures/scaling_unigenbench.jpg" style="width: 90%;">
+        <img src="assets/figures/scaling_unigenbench.jpg" style="width: 80%;" id="figure3">
         <p class="caption">
+            <b>Figure 3:</b>
             Scaling results on UniGenBench++ showing overall score versus compute. FMTT significantly out-performs prior methods, achieving higher scores at lower NFEs. 
             Note that FMTT with a 1-step denoiser lookahead fails in beating the simple Best-of-N baseline, demonstrating the unhelpfulness of
             reward gradients at blurry denoised states.
