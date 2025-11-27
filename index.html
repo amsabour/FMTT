@@ -222,17 +222,6 @@
         </p>
     </div>
 
-    <!-- <div class="container blog large">
-        <h1>Thermodynamic Length Analysis on MNIST</h1>
-        <h2>Michael + Carles: Please fill this in. </h2>
-        <h2>Michael + Carles: Please fill this in. </h2>
-        <h2>Michael + Carles: Please fill this in. </h2>
-        <h2>Michael + Carles: Please fill this in. </h2>
-        <p class="text">
-            TODO: FILL THIS IN.
-        </p>
-    </div> -->
-
     <div class="container blog large">
         <h1>Text-to-Image Generation Results</h1>
         <p class="text">
@@ -470,10 +459,33 @@
             For example, asking "Is &lt;PROMPT&gt; a correct caption for the image?" encourages the generation of images that more accurately match the prompt.
         </p>
         <p class="text">
+            We perform a quantitative evaluation of the performance of our method on the short english prompts of the 
+            <a target="_blank" href="https://codegoat24.github.io/UniGenBench/">UniGenBench++</a> benchmark using the 
+            <a target="_blank" href="https://huggingface.co/Skywork/Skywork-VL-Reward-7B">Skywork-VL-7B</a> reward model. 
+            This benchmark contains 600 short english prompts, and scores the generated images using the 
+            <a target="_blank" href="https://huggingface.co/CodeGoat24/UniGenBench-EvalModel-qwen-72b-v1">UniGenBench evaluation model</a>, 
+            a finetuned variant of Qwen2.5-VL-72B, across multiple dimensions such as world knowledge, visual reasoning, and more. 
+            We summarize the results as a performance-vs-compute scaling curve below. 
+            For more details, please refer to the <a target="_blank" href="#">paper</a>.
+        </p>
+    </div>
+
+    <div class="container blog main">
+        <img src="assets/figures/scaling_unigenbench.jpg" style="width: 90%;">
+        <p class="caption">
+            Scaling results on UniGenBench++ showing overall score versus compute. FMTT significantly out-performs prior methods, achieving higher scores at lower NFEs. 
+            Note that FMTT with a 1-step denoiser lookahead fails in beating the simple Best-of-N baseline, demonstrating the unhelpfulness of
+            reward gradients at blurry denoised states.
+        </p>
+    </div>
+
+    <div class="container blog large">
+        <p class="text">
             This approach provides a powerful and flexible way to steer generation toward arbitrary objectives by simply changing the prompt.
             Below we show several examples.
         </p>
     </div>
+
 
     <div class="container blog extra-large gray-linear">
         <div class="slideshow" data-width="90vw" data-padding="4vw" data-widthmobile="98vw" data-paddingmobile="1vw">
