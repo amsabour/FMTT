@@ -228,9 +228,14 @@
             its derivative recovers the instantaneous velocity $b_t(x_t)$ learned by standard flow matching.
             By using the flow map as a look-ahead that is both fast and accurate, and computing the reward gradient at the estimated final state (e.g. $r_t(x_t) = t\,r(X_{t, 1}(x_t))$), 
             FMTT enables consistent reward guidance throughout the trajectory. 
-            Essentially, FMTT steers the stochastic generative process with an efficient deterministic look-ahead towards high-reward regions (see <a href="#figure2">Figure 2</a> below).
+            Essentially, FMTT steers the <b>stochastic</b> generative process with an efficient <b>deterministic</b> look-ahead towards high-reward regions (see <a href="#figure2">Figure 2</a> below).
             We additionally unify sampling and search under one framework, allowing both exact sampling via importance weighting and 
-            reward-tilted search that reliably finds high-reward samples. Please refer to the paper for more details.
+            reward-tilted search that reliably finds high-reward samples. 
+            For principled sampling, we rely on Jarzynski's estimator to derive FMTT's time-dependent importance weights, which reduce to 
+            $
+            A_t = \int_{0}^{t} r(X_{t, 1}(x_t)) ds.
+            $
+            Please refer to the <a href="#" target="_blank">paper</a> for more details.
         </p>
     </div>
 
@@ -266,7 +271,7 @@
             object-centric prompts and measures the quality of the generated images using pre-trained object detectors.
         </p>
         <p class="text">
-            A summary of the results is shown in the table below. For more details, please refer to the paper.
+            A summary of the results is shown in the table below. For more details, please refer to the <a href="#" target="_blank">paper</a>.
             
             <div class="table-wrapper">
                 <table>
